@@ -63,10 +63,9 @@ In the Render dashboard under **Environment Variables**, add the following:
 | `RAZORPAY_KEY_ID` | Your Razorpay Key ID |
 | `RAZORPAY_KEY_SECRET` | Your Razorpay Key Secret |
 | `RAZORPAY_WEBHOOK_SECRET` | Your Razorpay Webhook Secret |
-| `SMTP_HOST` | `smtp.gmail.com` (or preferred SMTP server) |
-| `SMTP_PORT` | `587` |
-| `SMTP_USER` | SMTP username / email address |
-| `SMTP_PASS` | SMTP application password |
+| `BREVO_API_KEY` | Your Brevo REST API key (from Brevo Dashboard -> SMTP & API -> API Keys) |
+| `BREVO_SENDER_EMAIL` | Verified sender email in your Brevo account |
+| `BREVO_SENDER_NAME` | `Campus Stationery Shop` |
 | `RATE_LIMIT_WINDOW_MIN` | `15` |
 | `RATE_LIMIT_MAX` | `100` |
 

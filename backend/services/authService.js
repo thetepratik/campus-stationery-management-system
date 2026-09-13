@@ -191,14 +191,20 @@ const studentRegister = async ({
 
   await student.save();
 
-  await sendEmail({
-    to: student.email,
-    subject: 'Verify your Campus Stationery account',
-    html: otpEmailTemplate(
-      student.name,
-      otp
-    ),
-  });
+  try {
+    await sendEmail({
+      to: student.email,
+      subject: 'Verify your Campus Stationery account',
+      html: otpEmailTemplate(
+        student.name,
+        otp
+      ),
+    });
+  } catch (emailErr) {
+    // Clean up unverified student to prevent "student already exists" duplicate lock
+    await Student.findByIdAndDelete(student._id);
+    throw emailErr;
+  }
 
   return student;
 };
@@ -263,7 +269,7 @@ const studentResendOtp = async (email) => {
 
   const student = await Student.findOne({
     email: normalizedEmail,
-  });
+  }).select('+otp +otpExpires');
 
   if (!student) {
     throw new ApiError(
@@ -276,6 +282,15 @@ const studentResendOtp = async (email) => {
     throw new ApiError(
       400,
       'Account is already verified'
+    );
+  }
+
+  // 60-second cooldown check (OTP lifetime is 10 mins = 600s)
+  if (student.otpExpires && (student.otpExpires.getTime() - Date.now() > 9 * 60 * 1000)) {
+    const remainingSec = Math.ceil((student.otpExpires.getTime() - Date.now() - 9 * 60 * 1000) / 1000);
+    throw new ApiError(
+      429,
+      `Please wait ${remainingSec > 0 ? remainingSec : 60} seconds before requesting another OTP.`
     );
   }
 
@@ -311,7 +326,7 @@ const studentLogin = async (
 
   const student = await Student.findOne({
     email: normalizedEmail,
-  }).select('+password');
+  }).select('+password +otp +otpExpires');
 
   if (
     !student ||
@@ -324,6 +339,19 @@ const studentLogin = async (
   }
 
   if (!student.isVerified) {
+    // Generate and send a fresh OTP to student's email before directing to verify screen
+    const otp = student.generateOtp();
+    await student.save();
+
+    await sendEmail({
+      to: student.email,
+      subject: 'Verify your Campus Stationery account',
+      html: otpEmailTemplate(
+        student.name,
+        otp
+      ),
+    });
+
     throw new ApiError(
       403,
       'Please verify your account with the OTP sent to your email before logging in'
