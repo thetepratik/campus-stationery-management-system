@@ -1,0 +1,320 @@
+[{
+  "_id": {
+    "$oid": "6a76bec0ceb2c2976d6619b2"
+  },
+  "product": {
+    "$oid": "6a76bdd7ceb2c2976d661928"
+  },
+  "type": "sale-offline",
+  "quantityChange": -2,
+  "stockBefore": 20,
+  "stockAfter": 18,
+  "reference": {
+    "$oid": "6a76bec0ceb2c2976d6619ae"
+  },
+  "note": "Offline sale S0001",
+  "performedBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-08-08T05:29:36.544Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-08T05:29:36.544Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a7805c336b76926fe917fb9"
+  },
+  "product": {
+    "$oid": "6a7455a349fc3015794b0825"
+  },
+  "type": "sale-online",
+  "quantityChange": -2,
+  "stockBefore": 500,
+  "stockAfter": 498,
+  "reference": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "note": "Online order ORD1002",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-08-09T04:44:51.419Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-09T04:44:51.419Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a83307613aafd0df0473a2e"
+  },
+  "product": {
+    "$oid": "6a74567649fc3015794b0851"
+  },
+  "type": "sale-offline",
+  "quantityChange": -1,
+  "stockBefore": 300,
+  "stockAfter": 299,
+  "reference": {
+    "$oid": "6a83307613aafd0df0473a2a"
+  },
+  "note": "Offline sale S0002",
+  "performedBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-08-17T16:01:58.454Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-17T16:01:58.454Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a83315413aafd0df0473ac6"
+  },
+  "product": {
+    "$oid": "6a76b904ceb2c2976d661888"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 15,
+  "stockAfter": 14,
+  "reference": {
+    "$oid": "6a83315413aafd0df0473abf"
+  },
+  "note": "Online order ORD1003",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-08-17T16:05:40.417Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-17T16:05:40.417Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a72d30fc59e06aae84bd0"
+  },
+  "product": {
+    "$oid": "6a7455a349fc3015794b0825"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 498,
+  "stockAfter": 497,
+  "reference": {
+    "$oid": "6a9a72d30fc59e06aae84bc9"
+  },
+  "note": "Online order ORD1004",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T07:27:15.506Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:27:15.506Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a76470fc59e06aae84d04"
+  },
+  "product": {
+    "$oid": "6a76bc1fceb2c2976d6618fb"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 50,
+  "stockAfter": 49,
+  "reference": {
+    "$oid": "6a9a76460fc59e06aae84cfd"
+  },
+  "note": "Online order ORD1005",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T07:41:59.028Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:41:59.028Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a77850c5b6df68142e1b4"
+  },
+  "product": {
+    "$oid": "6a76b904ceb2c2976d661888"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 14,
+  "stockAfter": 13,
+  "reference": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "note": "Online order ORD1006",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T07:47:17.652Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:47:17.652Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a7a8faf8bbad3a0338905"
+  },
+  "product": {
+    "$oid": "6a76bc1fceb2c2976d6618fb"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 49,
+  "stockAfter": 48,
+  "reference": {
+    "$oid": "6a9a7a8faf8bbad3a03388fe"
+  },
+  "note": "Online order ORD1007",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:00:15.727Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:00:15.727Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a7aa4af8bbad3a033894a"
+  },
+  "product": {
+    "$oid": "6a780413750ace6b7d414114"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 50,
+  "stockAfter": 49,
+  "reference": {
+    "$oid": "6a9a7aa4af8bbad3a0338943"
+  },
+  "note": "Online order ORD1008",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:00:36.795Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:00:36.795Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a7ad8af8bbad3a0338994"
+  },
+  "product": {
+    "$oid": "6a780413750ace6b7d414114"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 49,
+  "stockAfter": 48,
+  "reference": {
+    "$oid": "6a9a7ad8af8bbad3a033898d"
+  },
+  "note": "Online order ORD1009",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:01:28.451Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:01:28.451Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c5fa3e847f038a9b3d5f"
+  },
+  "product": {
+    "$oid": "6a780413750ace6b7d414114"
+  },
+  "type": "return",
+  "quantityChange": 1,
+  "stockBefore": 48,
+  "stockAfter": 49,
+  "reference": {
+    "$oid": "6a9a7ad8af8bbad3a033898d"
+  },
+  "note": "Order ORD1009 cancelled",
+  "performedBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-09-12T03:24:42.923Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:24:42.923Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c6d23e847f038a9b3e54"
+  },
+  "product": {
+    "$oid": "6a7455a349fc3015794b0825"
+  },
+  "type": "sale-online",
+  "quantityChange": -1,
+  "stockBefore": 497,
+  "stockAfter": 496,
+  "reference": {
+    "$oid": "6aa4c6d13e847f038a9b3e4d"
+  },
+  "note": "Online order ORD1010",
+  "performedBy": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:28:18.022Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:28:18.022Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c9657cbf26356924f5d5"
+  },
+  "product": {
+    "$oid": "6a76b904ceb2c2976d661888"
+  },
+  "type": "return",
+  "quantityChange": 1,
+  "stockBefore": 13,
+  "stockAfter": 14,
+  "reference": {
+    "$oid": "6a83315413aafd0df0473abf"
+  },
+  "note": "Order ORD1003 removed by admin",
+  "performedBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-09-12T03:39:17.298Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:39:17.298Z"
+  },
+  "__v": 0
+}]

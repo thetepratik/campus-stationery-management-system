@@ -1,0 +1,40 @@
+[{
+  "_id": {
+    "$oid": "6a7455c849fc3015794b0841"
+  },
+  "product": {
+    "$oid": "6a7455a349fc3015794b0825"
+  },
+  "student": {
+    "$oid": "6a6b33c600f8687bbc2a8fbd"
+  },
+  "rating": 4,
+  "comment": "Good Pen and smooth",
+  "createdAt": {
+    "$date": "2026-08-06T09:37:12.972Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-06T09:37:12.972Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a7804c8750ace6b7d414173"
+  },
+  "product": {
+    "$oid": "6a745daa49fc3015794b08e2"
+  },
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "rating": 5,
+  "comment": "good Products",
+  "createdAt": {
+    "$date": "2026-08-09T04:40:40.173Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-09T04:40:40.173Z"
+  },
+  "__v": 0
+}]

@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "6a9a8ce24a07fa923d70d3f3"
+  },
+  "shopName": "Campus Stationery Hub",
+  "collegeName": "Vishwakarma Institute of Technology, Pune",
+  "address": "Survey No. 666, Upper Indira Nagar, Bibwewadi, Pune, Maharashtra 411037",
+  "phone": "9822003344",
+  "email": "stationery@vit.edu",
+  "logo": "",
+  "openingTime": "08:30",
+  "closingTime": "18:30",
+  "weeklyHoliday": "Sunday",
+  "createdAt": {
+    "$date": "2026-09-04T09:18:26.897Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T09:25:49.928Z"
+  },
+  "__v": 0
+}]

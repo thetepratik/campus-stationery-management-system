@@ -1,0 +1,583 @@
+[{
+  "_id": {
+    "$oid": "6a9a7a8faf8bbad3a033890f"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_PLACED",
+  "title": "🛒 Order Placed",
+  "message": "Your order #ORD1007 has been placed successfully for ₹32.42.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a7a8faf8bbad3a03388fe"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:00:15.808Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:00:15.808Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a87add7a5435e3ea98108"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "system",
+  "title": "Account Restricted",
+  "message": "Test restriction for verification",
+  "category": "system",
+  "priority": "high",
+  "relatedEntity": "",
+  "relatedEntityId": null,
+  "link": "",
+  "actionUrl": "",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:56:13.548Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:56:13.548Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a9a87add7a5435e3ea98110"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "system",
+  "title": "Account Restored",
+  "message": "Your campus stationery account has been restored and is now active.",
+  "category": "system",
+  "priority": "normal",
+  "relatedEntity": "",
+  "relatedEntityId": null,
+  "link": "",
+  "actionUrl": "",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-04T08:56:13.799Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:56:13.799Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c5fb3e847f038a9b3d64"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_CANCELLED",
+  "title": "❌ Order Cancelled",
+  "message": "Your order #ORD1009 has been cancelled.",
+  "category": "orders",
+  "priority": "high",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a7ad8af8bbad3a033898d"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:24:43.060Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:24:43.060Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c62a3e847f038a9b3d93"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_CONFIRMED",
+  "title": "🛒 Order Confirmed",
+  "message": "Your order #ORD1008 has been confirmed.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a7aa4af8bbad3a0338943"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:25:30.364Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:25:30.364Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c6383e847f038a9b3da2"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_CONFIRMED",
+  "title": "🛒 Order Confirmed",
+  "message": "Your order #ORD1006 has been confirmed.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:25:44.401Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:25:44.401Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c64b3e847f038a9b3db1"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_PREPARING",
+  "title": "📦 Order Being Prepared",
+  "message": "Your order #ORD1006 is being prepared.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:26:03.058Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:26:03.058Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c64d3e847f038a9b3dbb"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_READY",
+  "title": "✅ Ready for Pickup",
+  "message": "Your order #ORD1006 is ready for pickup at the counter!",
+  "category": "orders",
+  "priority": "high",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:26:05.959Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:26:05.959Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c6543e847f038a9b3dc5"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_COMPLETED",
+  "title": "🎉 Order Completed",
+  "message": "Your order #ORD1006 has been collected. Thank you!",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:26:12.890Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:26:12.890Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c6d23e847f038a9b3e5b"
+  },
+  "recipientType": "admin",
+  "recipientRole": "admin",
+  "recipient": null,
+  "type": "NEW_ORDER",
+  "title": "🛒 New Online Order",
+  "message": "New order #ORD1010 has been placed by Thete Pratik Ravasaheb for ₹13.44.",
+  "category": "orders",
+  "priority": "high",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6aa4c6d13e847f038a9b3e4d"
+  },
+  "link": "/admin/online-orders",
+  "actionUrl": "/admin/online-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:28:18.058Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:28:18.058Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c6d23e847f038a9b3e5e"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_PLACED",
+  "title": "🛒 Order Placed",
+  "message": "Your order #ORD1010 has been placed successfully for ₹13.44.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6aa4c6d13e847f038a9b3e4d"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:28:18.074Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:28:18.074Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c8f67cbf26356924f550"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_CONFIRMED",
+  "title": "🛒 Order Confirmed",
+  "message": "Your order #ORD1001 has been confirmed.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7804f7750ace6b7d414194"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:26.111Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:26.111Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c8f97cbf26356924f55a"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_PREPARING",
+  "title": "📦 Order Being Prepared",
+  "message": "Your order #ORD1001 is being prepared.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7804f7750ace6b7d414194"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:29.458Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:29.458Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c8fd7cbf26356924f564"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_READY",
+  "title": "✅ Ready for Pickup",
+  "message": "Your order #ORD1001 is ready for pickup at the counter!",
+  "category": "orders",
+  "priority": "high",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7804f7750ace6b7d414194"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:33.566Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:33.566Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c8ff7cbf26356924f56e"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_COMPLETED",
+  "title": "🎉 Order Completed",
+  "message": "Your order #ORD1001 has been collected. Thank you!",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7804f7750ace6b7d414194"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:35.666Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:35.666Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c9127cbf26356924f585"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_CONFIRMED",
+  "title": "🛒 Order Confirmed",
+  "message": "Your order #ORD1002 has been confirmed.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:54.605Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:54.605Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c9157cbf26356924f58f"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_PREPARING",
+  "title": "📦 Order Being Prepared",
+  "message": "Your order #ORD1002 is being prepared.",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:37:57.618Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:57.618Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c9197cbf26356924f599"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_READY",
+  "title": "✅ Ready for Pickup",
+  "message": "Your order #ORD1002 is ready for pickup at the counter!",
+  "category": "orders",
+  "priority": "high",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:38:01.267Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:38:01.267Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6aa4c91a7cbf26356924f5a3"
+  },
+  "recipientType": "student",
+  "recipientRole": "student",
+  "recipient": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "type": "ORDER_COMPLETED",
+  "title": "🎉 Order Completed",
+  "message": "Your order #ORD1002 has been collected. Thank you!",
+  "category": "orders",
+  "priority": "normal",
+  "relatedEntity": "Order",
+  "relatedEntityId": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "link": "/my-orders",
+  "actionUrl": "/my-orders",
+  "isRead": false,
+  "readAt": null,
+  "expiresAt": null,
+  "createdAt": {
+    "$date": "2026-09-12T03:38:02.953Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:38:02.953Z"
+  },
+  "__v": 0
+}]

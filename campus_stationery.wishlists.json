@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "6a6e03098e9aba8112b924cc"
+  },
+  "student": {
+    "$oid": "6a6b33c600f8687bbc2a8fbd"
+  },
+  "products": [],
+  "createdAt": {
+    "$date": "2026-08-01T14:30:33.880Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-08T05:28:20.843Z"
+  },
+  "__v": 6
+},
+{
+  "_id": {
+    "$oid": "6a83313913aafd0df0473a9d"
+  },
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "products": [],
+  "createdAt": {
+    "$date": "2026-08-17T16:05:13.932Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:50:16.269Z"
+  },
+  "__v": 2
+}]

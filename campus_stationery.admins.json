@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "name": "Campus Admin",
+  "email": "admin@campus.com",
+  "password": "$2a$12$T7HD7EssS/mpajZcvpuhg.c.mcF6NIXLlzdGdhjLEV6Gs2XTi8OAm",
+  "avatar": "",
+  "shopName": "Campus Stationery",
+  "shopLogo": "",
+  "mobile": "9876543210",
+  "address": "",
+  "role": "admin",
+  "lastLoginAt": {
+    "$date": "2026-09-12T03:22:11.624Z"
+  },
+  "createdAt": {
+    "$date": "2026-07-30T12:03:06.355Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:22:11.639Z"
+  },
+  "__v": 0
+}]

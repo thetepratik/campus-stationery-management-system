@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "6a76bec0ceb2c2976d6619ae"
+  },
+  "saleId": "S0001",
+  "items": [
+    {
+      "product": {
+        "$oid": "6a76bdd7ceb2c2976d661928"
+      },
+      "name": "A4 Copier Paper (500 Sheets)",
+      "quantity": 2,
+      "unitPrice": 280,
+      "gstPercent": 18,
+      "subtotal": 560
+    }
+  ],
+  "totalAmount": 560,
+  "customerName": "Sham Sharma",
+  "rollNumber": "",
+  "department": "",
+  "remarks": "",
+  "paymentMethod": "cash",
+  "paymentConfirmed": true,
+  "soldBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-08-08T05:29:36.526Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-08T05:29:36.526Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6a83307613aafd0df0473a2a"
+  },
+  "saleId": "S0002",
+  "items": [
+    {
+      "product": {
+        "$oid": "6a74567649fc3015794b0851"
+      },
+      "name": "Apsara Platinum Pencil Pack (10 Pcs)",
+      "quantity": 1,
+      "unitPrice": 50,
+      "gstPercent": 18,
+      "subtotal": 50
+    }
+  ],
+  "totalAmount": 50,
+  "customerName": "Sham Sharma",
+  "rollNumber": "",
+  "department": "",
+  "remarks": "",
+  "paymentMethod": "cash",
+  "paymentConfirmed": true,
+  "soldBy": {
+    "$oid": "6a6b3d7a81d4371b9c8f7d22"
+  },
+  "createdAt": {
+    "$date": "2026-08-17T16:01:58.433Z"
+  },
+  "updatedAt": {
+    "$date": "2026-08-17T16:01:58.433Z"
+  },
+  "__v": 0
+}]

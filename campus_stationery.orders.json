@@ -1,0 +1,500 @@
+[{
+  "_id": {
+    "$oid": "6a7804f7750ace6b7d414194"
+  },
+  "orderId": "ORD1001",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [],
+  "itemsCount": 2,
+  "totalAmount": 26.88,
+  "gstAmount": 2.88,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "cash-on-pickup",
+  "paymentStatus": "pending",
+  "status": "completed",
+  "pickupTime": {
+    "$date": "2026-08-09T06:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-08-09T04:41:27.130Z"
+      }
+    },
+    {
+      "status": "confirmed",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:26.061Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "packing",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:29.429Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "ready-for-pickup",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:33.552Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "collected",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:35.651Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "completed",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:39.627Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-08-09T04:41:27.182Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:37:39.639Z"
+  },
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "6a7805c336b76926fe917fb2"
+  },
+  "orderId": "ORD1002",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a7805c336b76926fe917fb4"
+    }
+  ],
+  "itemsCount": 2,
+  "totalAmount": 26.88,
+  "gstAmount": 2.88,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "cash-on-pickup",
+  "paymentStatus": "pending",
+  "status": "completed",
+  "pickupTime": {
+    "$date": "2026-08-09T06:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-08-09T04:44:51.270Z"
+      }
+    },
+    {
+      "status": "confirmed",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:54.591Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "packing",
+      "changedAt": {
+        "$date": "2026-09-12T03:37:57.603Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "ready-for-pickup",
+      "changedAt": {
+        "$date": "2026-09-12T03:38:01.231Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "collected",
+      "changedAt": {
+        "$date": "2026-09-12T03:38:02.937Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "completed",
+      "changedAt": {
+        "$date": "2026-09-12T03:38:05.047Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-08-09T04:44:51.324Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:38:05.051Z"
+  },
+  "__v": 6
+},
+{
+  "_id": {
+    "$oid": "6a9a72d30fc59e06aae84bc9"
+  },
+  "orderId": "ORD1004",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a72d30fc59e06aae84bcb"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 13.44,
+  "gstAmount": 1.44,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "razorpay",
+  "paymentStatus": "pending",
+  "status": "pending",
+  "pickupTime": {
+    "$date": "2026-09-04T08:30:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T07:27:15.344Z"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T07:27:15.357Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:27:15.475Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6a9a76460fc59e06aae84cfd"
+  },
+  "orderId": "ORD1005",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a76460fc59e06aae84cff"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 32.42,
+  "gstAmount": 3.47,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "razorpay",
+  "paymentStatus": "pending",
+  "status": "pending",
+  "pickupTime": {
+    "$date": "2026-09-04T09:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T07:41:58.968Z"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T07:41:58.978Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T07:41:58.998Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6a9a77850c5b6df68142e1ad"
+  },
+  "orderId": "ORD1006",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a77850c5b6df68142e1af"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 53.2,
+  "gstAmount": 5.7,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "cash-on-pickup",
+  "paymentStatus": "pending",
+  "status": "collected",
+  "pickupTime": {
+    "$date": "2026-09-04T09:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T07:47:17.592Z"
+      }
+    },
+    {
+      "status": "confirmed",
+      "changedAt": {
+        "$date": "2026-09-12T03:25:44.387Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "packing",
+      "changedAt": {
+        "$date": "2026-09-12T03:26:03.038Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "ready-for-pickup",
+      "changedAt": {
+        "$date": "2026-09-12T03:26:05.938Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    },
+    {
+      "status": "collected",
+      "changedAt": {
+        "$date": "2026-09-12T03:26:12.873Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T07:47:17.601Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:26:12.877Z"
+  },
+  "__v": 5
+},
+{
+  "_id": {
+    "$oid": "6a9a7a8faf8bbad3a03388fe"
+  },
+  "orderId": "ORD1007",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a7a8faf8bbad3a0338900"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 32.42,
+  "gstAmount": 3.47,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "cash-on-pickup",
+  "paymentStatus": "pending",
+  "status": "pending",
+  "pickupTime": {
+    "$date": "2026-09-04T09:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T08:00:15.676Z"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T08:00:15.684Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-04T08:00:15.708Z"
+  },
+  "__v": 1
+},
+{
+  "_id": {
+    "$oid": "6a9a7aa4af8bbad3a0338943"
+  },
+  "orderId": "ORD1008",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a7aa4af8bbad3a0338945"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 34.47,
+  "gstAmount": 5.26,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "razorpay",
+  "paymentStatus": "pending",
+  "status": "confirmed",
+  "pickupTime": {
+    "$date": "2026-09-04T09:00:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T08:00:36.700Z"
+      }
+    },
+    {
+      "status": "confirmed",
+      "changedAt": {
+        "$date": "2026-09-12T03:25:30.346Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T08:00:36.718Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:25:30.350Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "6a9a7ad8af8bbad3a033898d"
+  },
+  "orderId": "ORD1009",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6a9a7ad8af8bbad3a033898f"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 34.47,
+  "gstAmount": 5.26,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "razorpay",
+  "paymentStatus": "pending",
+  "status": "cancelled",
+  "pickupTime": {
+    "$date": "2026-09-04T09:30:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-04T08:01:28.407Z"
+      }
+    },
+    {
+      "status": "cancelled",
+      "changedAt": {
+        "$date": "2026-09-12T03:24:43.013Z"
+      },
+      "changedBy": {
+        "$oid": "6a6b3d7a81d4371b9c8f7d22"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-04T08:01:28.411Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:24:43.023Z"
+  },
+  "__v": 2
+},
+{
+  "_id": {
+    "$oid": "6aa4c6d13e847f038a9b3e4d"
+  },
+  "orderId": "ORD1010",
+  "student": {
+    "$oid": "6a77fb9819314a3b2e2b9624"
+  },
+  "items": [
+    {
+      "$oid": "6aa4c6d13e847f038a9b3e4f"
+    }
+  ],
+  "itemsCount": 1,
+  "totalAmount": 13.44,
+  "gstAmount": 1.44,
+  "discountAmount": 0,
+  "couponCode": "",
+  "paymentMethod": "cash-on-pickup",
+  "paymentStatus": "pending",
+  "status": "pending",
+  "pickupTime": {
+    "$date": "2026-09-12T04:30:00.000Z"
+  },
+  "statusHistory": [
+    {
+      "status": "pending",
+      "changedAt": {
+        "$date": "2026-09-12T03:28:17.934Z"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2026-09-12T03:28:17.940Z"
+  },
+  "updatedAt": {
+    "$date": "2026-09-12T03:28:17.997Z"
+  },
+  "__v": 1
+}]

@@ -1,0 +1,42 @@
+{
+  "name": "campus-stationery-backend",
+  "version": "1.0.0",
+  "description": "Campus Stationery Inventory & Sales Management System - Backend API",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node scripts/seed.js",
+    "seed:images": "node scripts/seedImages.js",
+    "fix:images": "node scripts/backfillMissingImages.js",
+    "create-admin": "node seeder/createAdmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "express-async-handler": "^1.2.0",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.2.0",
+    "express-validator": "^7.1.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.13",
+    "pdfkit": "^0.15.0",
+    "razorpay": "^2.9.4",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
