@@ -20,6 +20,9 @@ const {
 
 const app = express();
 
+// Enable trust proxy for reverse proxy platforms like Render
+app.set('trust proxy', 1);
+
 /*
 |--------------------------------------------------------------------------
 | Security Headers
@@ -39,18 +42,35 @@ app.use(
 | CORS
 |--------------------------------------------------------------------------
 |
-| React frontend:
-| http://localhost:5173
+| Production Vercel frontend:
+| https://campus-stationery-management-system.vercel.app
 |
-| Backend:
-| http://localhost:5000
+| Local frontend:
+| http://localhost:5173
 |
 */
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://campus-stationery-management-system.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+].filter(Boolean).map((url) => url.replace(/\/$/, ''));
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      const cleanOrigin = origin.replace(/\/$/, '');
+      if (allowedOrigins.includes(cleanOrigin)) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role', 'x-role'],
   })
 );
 

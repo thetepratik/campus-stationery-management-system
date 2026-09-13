@@ -26,7 +26,12 @@ const generateTokenAndSetCookie = (res, id, role) => {
 
 const clearAuthCookie = (res, role) => {
   const cookieName = role === 'admin' ? `${process.env.JWT_COOKIE_NAME}_admin` : `${process.env.JWT_COOKIE_NAME}_student`;
-  res.clearCookie(cookieName, { path: '/' });
+  res.clearCookie(cookieName, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    path: '/',
+  });
 };
 
 module.exports = { generateTokenAndSetCookie, clearAuthCookie };

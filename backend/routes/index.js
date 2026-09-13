@@ -42,7 +42,11 @@ router.use('/notifications', notificationRoutes);
 // Phase 11+ will mount: /notifications, /settings
 
 router.get('/health', (req, res) => {
-  res.json({ success: true, message: 'API is healthy', timestamp: new Date().toISOString() });
+  res.json({
+    success: true,
+    message: 'Campus Stationery API is running',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 module.exports = router;
