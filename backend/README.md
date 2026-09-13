@@ -38,8 +38,26 @@ In the Render dashboard under **Environment Variables**, add the following:
 | `NODE_ENV` | `production` |
 | `PORT` | `10000` (or leave default set by Render) |
 | `CLIENT_URL` | `https://campus-stationery-management-system.vercel.app` (do not add trailing slash) |
-| `MONGO_URI` | Your MongoDB Atlas connection string |
+| `MONGO_URI` | `mongodb+srv://<USERNAME>:<PASSWORD>@campus-stationery-manag.syuuf5n.mongodb.net/campus_stationery?retryWrites=true&w=majority` |
 | `JWT_SECRET` | A secure random string for signing JWT tokens |
+
+---
+
+### MongoDB Atlas Setup Guide
+
+1. **Database Name**: Use `campus_stationery`.
+2. **Cluster**: `campus-stationery-manag.syuuf5n.mongodb.net`.
+3. **Connection String Format**:
+   ```
+   mongodb+srv://<USERNAME>:<PASSWORD>@campus-stationery-manag.syuuf5n.mongodb.net/campus_stationery?retryWrites=true&w=majority
+   ```
+4. **Network Access**:
+   - In MongoDB Atlas dashboard -> **Network Access** -> **Add IP Address**.
+   - Add `0.0.0.0/0` (Allow Access from Anywhere) so that Render's dynamic outbound IPs can connect.
+5. **Database User**:
+   - In Atlas dashboard -> **Database Access** -> **Add New Database User**.
+   - Assign Read and Write privileges to `campus_stationery`.
+   - If the password contains special characters (`@`, `:`, `/`, `?`, `#`, `&`, `%`), URL-encode them.
 | `JWT_EXPIRES_IN` | `7d` |
 | `JWT_COOKIE_NAME` | `cs_token` |
 | `RAZORPAY_KEY_ID` | Your Razorpay Key ID |
