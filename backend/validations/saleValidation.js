@@ -21,6 +21,7 @@ const saleListQueryValidation = [
   query('from').optional().isISO8601(),
   query('to').optional().isISO8601(),
   query('paymentMethod').optional().isIn(Object.values(OFFLINE_PAYMENT_METHOD)),
+  query('status').optional().isIn(['completed', 'reversed', '']),
 ];
 
 module.exports = { saleCreateValidation, saleListQueryValidation };

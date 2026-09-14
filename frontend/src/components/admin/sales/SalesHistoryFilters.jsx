@@ -29,6 +29,17 @@ const SalesHistoryFilters = ({ filters, onChange }) => {
         <option value="paytm">Paytm</option>
       </select>
 
+      <select
+        className="form-select"
+        style={{ width: 150 }}
+        value={filters.status || ''}
+        onChange={(e) => update({ status: e.target.value })}
+      >
+        <option value="">All Statuses</option>
+        <option value="completed">Completed</option>
+        <option value="reversed">Reversed</option>
+      </select>
+
       <input type="date" className="form-input" style={{ width: 160 }} value={filters.from} onChange={(e) => update({ from: e.target.value })} title="From date" />
       <input type="date" className="form-input" style={{ width: 160 }} value={filters.to} onChange={(e) => update({ to: e.target.value })} title="To date" />
     </div>

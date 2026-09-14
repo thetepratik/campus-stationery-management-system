@@ -11,9 +11,10 @@ import StatCard from '../../components/admin/dashboard/StatCard';
 import SalesHistoryFilters from '../../components/admin/sales/SalesHistoryFilters';
 import SalesHistoryTable from '../../components/admin/sales/SalesHistoryTable';
 import ReceiptModal from '../../components/admin/sales/ReceiptModal';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { FiShoppingBag, FiDollarSign } from 'react-icons/fi';
 
-const DEFAULT_FILTERS = { search: '', paymentMethod: '', from: '', to: '', page: 1 };
+const DEFAULT_FILTERS = { search: '', paymentMethod: '', status: '', from: '', to: '', page: 1 };
 
 const SalesHistory = () => {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -23,6 +24,8 @@ const SalesHistory = () => {
   const [meta, setMeta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [viewingSale, setViewingSale] = useState(null);
+  const [saleToUndo, setSaleToUndo] = useState(null);
+  const [undoing, setUndoing] = useState(false);
 
   const fetchSales = useCallback(async () => {
     setLoading(true);
@@ -50,6 +53,21 @@ const SalesHistory = () => {
     }
   };
 
+  const handleConfirmUndo = async () => {
+    if (!saleToUndo) return;
+    setUndoing(true);
+    try {
+      const res = await saleApi.undo(saleToUndo._id);
+      toast.success(res.message || `Sale ${saleToUndo.saleId} reversed successfully`);
+      setSaleToUndo(null);
+      await fetchSales();
+    } catch (err) {
+      toast.error(err.message || 'Failed to undo sale');
+    } finally {
+      setUndoing(false);
+    }
+  };
+
   return (
     <div>
       <div className="dashboard-stats-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
@@ -66,13 +84,24 @@ const SalesHistory = () => {
           <Skeleton height={48} count={6} style={{ marginBottom: 8 }} />
         ) : (
           <>
-            <SalesHistoryTable sales={sales} onView={handleView} />
+            <SalesHistoryTable sales={sales} onView={handleView} onUndo={(s) => setSaleToUndo(s)} />
             <Pagination meta={meta} onPageChange={(page) => setFilters((f) => ({ ...f, page }))} />
           </>
         )}
       </div>
 
       <ReceiptModal open={!!viewingSale} onClose={() => setViewingSale(null)} sale={viewingSale} />
+
+      <ConfirmDialog
+        open={!!saleToUndo}
+        onClose={() => !undoing && setSaleToUndo(null)}
+        onConfirm={handleConfirmUndo}
+        title="Undo this sale?"
+        message="This will restore the sold quantity to inventory, reverse the sale amount from revenue, and mark the sale as reversed."
+        confirmLabel="Undo Sale"
+        variant="danger"
+        loading={undoing}
+      />
     </div>
   );
 };

@@ -25,11 +25,20 @@ const saleSchema = new mongoose.Schema(
     paymentMethod: { type: String, enum: Object.values(OFFLINE_PAYMENT_METHOD), required: true },
     paymentConfirmed: { type: Boolean, default: false },
     soldBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
+    status: {
+      type: String,
+      enum: ['completed', 'reversed'],
+      default: 'completed',
+    },
+    reversedAt: { type: Date },
+    reversedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
+    reversalReason: { type: String, default: '' },
   },
   { timestamps: true }
 );
 
 saleSchema.index({ createdAt: -1 });
 saleSchema.index({ rollNumber: 1 });
+saleSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Sale', saleSchema);

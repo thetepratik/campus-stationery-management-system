@@ -53,7 +53,7 @@ const getSummary = async () => {
     Product.countDocuments({ $expr: { $and: [{ $gt: ['$currentStock', 0] }, { $lte: ['$currentStock', '$minStock'] }] } }),
     Product.countDocuments({ currentStock: { $lte: 0 } }),
     Sale.aggregate([
-      { $match: { createdAt: { $gte: today }, paymentConfirmed: true } },
+      { $match: { createdAt: { $gte: today }, paymentConfirmed: true, status: { $ne: 'reversed' } } },
       { $group: { _id: null, count: { $sum: 1 }, revenue: { $sum: '$totalAmount' } } },
     ]),
     Order.aggregate([
@@ -63,7 +63,7 @@ const getSummary = async () => {
     (async () => {
       const [offline, online] = await Promise.all([
         Sale.aggregate([
-          { $match: { createdAt: { $gte: monthStart }, paymentConfirmed: true } },
+          { $match: { createdAt: { $gte: monthStart }, paymentConfirmed: true, status: { $ne: 'reversed' } } },
           { $group: { _id: null, total: { $sum: '$totalAmount' } } },
         ]),
         Order.aggregate([
@@ -109,7 +109,7 @@ const getSalesChart = async (rangeDays = 30) => {
 
   const [offlineDaily, onlineDaily] = await Promise.all([
     Sale.aggregate([
-      { $match: { createdAt: { $gte: from }, paymentConfirmed: true } },
+      { $match: { createdAt: { $gte: from }, paymentConfirmed: true, status: { $ne: 'reversed' } } },
       { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, count: { $sum: 1 } } },
     ]),
     Order.aggregate([
@@ -141,7 +141,7 @@ const getRevenueChart = async (rangeDays = 30) => {
 
   const [offlineDaily, onlineDaily] = await Promise.all([
     Sale.aggregate([
-      { $match: { createdAt: { $gte: from }, paymentConfirmed: true } },
+      { $match: { createdAt: { $gte: from }, paymentConfirmed: true, status: { $ne: 'reversed' } } },
       { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, revenue: { $sum: '$totalAmount' } } },
     ]),
     Order.aggregate([
@@ -170,7 +170,7 @@ const getRevenueChart = async (rangeDays = 30) => {
  */
 const getPaymentMethodChart = async () => {
   const results = await Sale.aggregate([
-    { $match: { paymentConfirmed: true } },
+    { $match: { paymentConfirmed: true, status: { $ne: 'reversed' } } },
     { $group: { _id: '$paymentMethod', count: { $sum: 1 } } },
   ]);
 
@@ -247,7 +247,7 @@ const getRecentSales = async (limit = 8) => {
   return Sale.find({ paymentConfirmed: true })
     .sort({ createdAt: -1 })
     .limit(limit)
-    .select('saleId items totalAmount customerName paymentMethod createdAt')
+    .select('saleId items totalAmount customerName paymentMethod status createdAt')
     .lean();
 };
 

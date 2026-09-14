@@ -24,4 +24,10 @@ const downloadInvoice = asyncHandler(async (req, res) => {
   streamSaleInvoice(sale, res);
 });
 
-module.exports = { createSale, listSales, getSale, downloadInvoice };
+const undoSale = asyncHandler(async (req, res) => {
+  const io = req.app.get('io');
+  const sale = await saleService.undoSale(req.params.id, req.user._id, req.body?.reason, io);
+  success(res, 200, `Sale ${sale.saleId} reversed successfully`, { sale });
+});
+
+module.exports = { createSale, listSales, getSale, downloadInvoice, undoSale };

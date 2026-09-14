@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const Sale = require('../models/Sale');
 const ApiError = require('../utils/ApiError');
@@ -75,6 +76,7 @@ const createSale = async (data, adminId, io) => {
     paymentMethod,
     paymentConfirmed: true,
     soldBy: adminId,
+    status: 'completed',
   });
 
   // Pass 2: apply stock deductions now that the sale record exists (reference for the ledger).
@@ -119,7 +121,11 @@ const createSale = async (data, adminId, io) => {
 };
 
 const getSaleById = async (id) => {
-  const sale = await Sale.findById(id).populate('soldBy', 'name').populate('items.product', 'name sku images');
+  const query = mongoose.Types.ObjectId.isValid(id) ? { _id: id } : { saleId: id };
+  const sale = await Sale.findOne(query)
+    .populate('soldBy', 'name')
+    .populate('reversedBy', 'name')
+    .populate('items.product', 'name sku images');
   if (!sale) throw new ApiError(404, 'Sale not found');
 
   const plainSale = sale.toObject();
@@ -136,29 +142,122 @@ const getSaleById = async (id) => {
 
 const listSales = async (query) => {
   const { skip, limit, buildMeta } = getPagination(query, 20, 100);
-  const filter = { paymentConfirmed: true };
+  const conditions = [{ paymentConfirmed: true }];
 
   if (query.search) {
-    filter.$or = [
-      { saleId: { $regex: query.search, $options: 'i' } },
-      { customerName: { $regex: query.search, $options: 'i' } },
-      { rollNumber: { $regex: query.search, $options: 'i' } },
-    ];
-  }
-  if (query.paymentMethod) filter.paymentMethod = query.paymentMethod;
-  if (query.from || query.to) {
-    filter.createdAt = {};
-    if (query.from) filter.createdAt.$gte = new Date(query.from);
-    if (query.to) filter.createdAt.$lte = new Date(query.to);
+    conditions.push({
+      $or: [
+        { saleId: { $regex: query.search, $options: 'i' } },
+        { customerName: { $regex: query.search, $options: 'i' } },
+        { rollNumber: { $regex: query.search, $options: 'i' } },
+      ],
+    });
   }
 
+  if (query.paymentMethod) {
+    conditions.push({ paymentMethod: query.paymentMethod });
+  }
+
+  if (query.status) {
+    if (query.status === 'completed') {
+      conditions.push({ status: { $ne: 'reversed' } });
+    } else if (query.status === 'reversed') {
+      conditions.push({ status: 'reversed' });
+    }
+  }
+
+  if (query.from || query.to) {
+    const dateFilter = {};
+    if (query.from) dateFilter.$gte = new Date(query.from);
+    if (query.to) dateFilter.$lte = new Date(query.to);
+    conditions.push({ createdAt: dateFilter });
+  }
+
+  const filter = conditions.length === 1 ? conditions[0] : { $and: conditions };
+
+  // For active revenue total calculation, exclude reversed sales
+  const revenueConditions = [...conditions, { status: { $ne: 'reversed' } }];
+  const revenueFilter = { $and: revenueConditions };
+
   const [items, totalCount, totalAgg] = await Promise.all([
-    Sale.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+    Sale.find(filter)
+      .populate('soldBy', 'name')
+      .populate('reversedBy', 'name')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
     Sale.countDocuments(filter),
-    Sale.aggregate([{ $match: filter }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }]),
+    Sale.aggregate([{ $match: revenueFilter }, { $group: { _id: null, total: { $sum: '$totalAmount' } } }]),
   ]);
 
   return { items, meta: { ...buildMeta(totalCount), totalRevenue: totalAgg[0]?.total || 0 } };
 };
 
-module.exports = { createSale, getSaleById, listSales, generateNextSaleId };
+/**
+ * Undoes / reverses an offline sale.
+ * 1. Verifies the sale exists and status === 'completed'.
+ * 2. Restores exact sold quantity back to inventory ledger and product stock.
+ * 3. Decreases product soldCount by the exact quantity.
+ * 4. Marks sale status as 'reversed' and stores reversedAt, reversedBy, reversalReason.
+ * 5. Prevents double reversal via atomic update.
+ */
+const undoSale = async (id, adminId, reason = '', io) => {
+  const query = mongoose.Types.ObjectId.isValid(id) ? { _id: id } : { saleId: id };
+  const sale = await Sale.findOne(query);
+  if (!sale) throw new ApiError(404, 'Sale not found');
+
+  if (sale.status === 'reversed') {
+    throw new ApiError(400, `Sale ${sale.saleId} has already been reversed`);
+  }
+
+  // Atomically claim reversal to guard against concurrent double-reversal
+  const updatedSale = await Sale.findOneAndUpdate(
+    { _id: sale._id, status: { $ne: 'reversed' } },
+    {
+      $set: {
+        status: 'reversed',
+        reversedAt: new Date(),
+        reversedBy: adminId,
+        reversalReason: reason || '',
+      },
+    },
+    { new: true }
+  )
+    .populate('soldBy', 'name')
+    .populate('reversedBy', 'name');
+
+  if (!updatedSale) {
+    throw new ApiError(400, `Sale ${sale.saleId} has already been reversed`);
+  }
+
+  // Restore inventory & decrease product soldCount
+  for (const item of sale.items) {
+    await inventoryService.applyStockChange({
+      productId: item.product,
+      type: INVENTORY_MOVEMENT_TYPE.RETURN,
+      quantityChange: item.quantity,
+      reference: sale._id,
+      note: `Offline sale reversal ${sale.saleId}${reason ? ': ' + reason : ''}`,
+      performedBy: adminId,
+    });
+
+    await Product.updateOne(
+      { _id: item.product },
+      { $inc: { soldCount: -item.quantity } }
+    );
+  }
+
+  if (io) {
+    await notifyAdmin(io, {
+      type: 'payment',
+      title: 'Offline sale reversed',
+      message: `Sale ${sale.saleId} was reversed. ₹${sale.totalAmount} reversed from revenue and stock restored.`,
+      link: '/admin/sales-history',
+    });
+  }
+
+  return updatedSale;
+};
+
+module.exports = { createSale, getSaleById, listSales, generateNextSaleId, undoSale };

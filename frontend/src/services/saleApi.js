@@ -12,5 +12,6 @@ export const saleApi = {
   list: (params) => api.get(`/sales?${buildQueryString(params)}`),
   get: (id) => api.get(`/sales/${id}`),
   create: (payload) => api.post('/sales', payload),
+  undo: (id, reason) => api.patch(`/sales/${id}/undo`, { reason }),
   invoiceUrl: (id) => `/api/sales/${id}/invoice`,
 };

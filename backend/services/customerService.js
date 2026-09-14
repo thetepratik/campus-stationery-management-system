@@ -46,6 +46,7 @@ const getGlobalCustomerSummary = async () => {
           rollNumber: {
             $in: validRolls.map((r) => new RegExp(`^${r.trim()}$`, 'i')),
           },
+          status: { $ne: 'reversed' },
         },
       },
       { $group: { _id: null, count: { $sum: 1 }, spent: { $sum: '$totalAmount' } } },
@@ -383,7 +384,7 @@ const getCustomerPurchases = async (customerId, { page = 1, limit = 20, type = '
       totalAmount: s.totalAmount,
       paymentMethod: s.paymentMethod,
       paymentStatus: s.paymentConfirmed ? 'paid' : 'pending',
-      status: s.paymentConfirmed ? 'completed' : 'pending',
+      status: s.status || (s.paymentConfirmed ? 'completed' : 'pending'),
       createdAt: s.createdAt,
     };
   });
@@ -436,6 +437,7 @@ const getCustomerStatistics = async (customerId) => {
     student.rollNumber
       ? Sale.find({
           rollNumber: new RegExp(`^${student.rollNumber.trim()}$`, 'i'),
+          status: { $ne: 'reversed' },
         }).lean()
       : [],
   ]);

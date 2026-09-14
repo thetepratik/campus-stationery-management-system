@@ -32,7 +32,6 @@ const Checkout = () => {
   const navigate = useNavigate();
 
   const [pickupTime, setPickupTime] = useState(toLocalInputValue(getMinPickupTime()));
-  const [paymentMethod, setPaymentMethod] = useState('cash-on-pickup');
   const [placing, setPlacing] = useState(false);
 
   if (!loading && (!cart || cart.items.length === 0)) {
@@ -40,25 +39,7 @@ const Checkout = () => {
   }
 
   const handlePlaceOrder = async () => {
-    if (paymentMethod === 'razorpay') {
-      await handleRazorpayCheckout();
-    } else {
-      await handleCashCheckout();
-    }
-  };
-
-  const handleCashCheckout = async () => {
-    setPlacing(true);
-    try {
-      const res = await orderApi.checkoutCash(new Date(pickupTime).toISOString());
-      toast.success(res.message);
-      await refresh();
-      navigate(`/order-confirmation/${res.data.order._id}`);
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setPlacing(false);
-    }
+    await handleRazorpayCheckout();
   };
 
   const handleRazorpayCheckout = async () => {
@@ -170,51 +151,20 @@ const Checkout = () => {
               <div className="panel__header">
                 <span className="panel__title flex items-center gap-2"><FiCreditCard size={15} /> Payment Method</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                <label
-                  className="flex items-center gap-3"
-                  style={{
-                    padding: 'var(--space-3)',
-                    border: `1px solid ${paymentMethod === 'cash-on-pickup' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                    borderRadius: 'var(--radius-md)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <input
-                    type="radio"
-                    checked={paymentMethod === 'cash-on-pickup'}
-                    onChange={() => setPaymentMethod('cash-on-pickup')}
-                  />
-                  <div>
-                    <div style={{ fontWeight: 500, fontSize: 'var(--font-size-sm)' }}>Cash on Pickup</div>
-                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
-                      Pay in cash when you collect your order at the counter
-                    </div>
-                  </div>
-                </label>
-                <label
-                  className="flex items-center gap-3"
-                  style={{
-                    padding: 'var(--space-3)',
-                    border: `1px solid ${paymentMethod === 'razorpay' ? 'var(--color-primary)' : 'var(--color-border)'}`,
-                    borderRadius: 'var(--radius-md)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  <input
-                    type="radio"
-                    checked={paymentMethod === 'razorpay'}
-                    onChange={() => setPaymentMethod('razorpay')}
-                  />
-                  <div>
-                    <div style={{ fontWeight: 500, fontSize: 'var(--font-size-sm)' }}>
-                      Pay Online (UPI / Card / Netbanking / Wallet)
-                    </div>
-                    <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
-                      Secured by Razorpay — pay now and skip the counter queue
-                    </div>
-                  </div>
-                </label>
+              <div
+                style={{
+                  padding: 'var(--space-4)',
+                  border: '1px solid var(--color-primary)',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'rgba(79, 70, 229, 0.04)',
+                }}
+              >
+                <div style={{ fontWeight: 600, fontSize: 'var(--font-size-md)', color: 'var(--color-primary)' }}>
+                  Pay Online (UPI / Card / Net Banking / Wallet)
+                </div>
+                <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: 4 }}>
+                  Secured by Razorpay — pay now and skip the counter queue
+                </div>
               </div>
             </div>
           </div>
@@ -233,7 +183,7 @@ const Checkout = () => {
             <div style={{ borderTop: '1px solid var(--color-border)', margin: 'var(--space-3) 0' }} />
             <OrderSummary cart={cart} />
             <Button fullWidth size="lg" style={{ marginTop: 'var(--space-5)' }} onClick={handlePlaceOrder} loading={placing}>
-              {paymentMethod === 'razorpay' ? 'Proceed to Pay' : 'Place Order'}
+              Proceed to Pay
             </Button>
           </div>
         </div>

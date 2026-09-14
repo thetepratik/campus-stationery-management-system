@@ -84,6 +84,7 @@ const getSalesReportData = async (query = {}) => {
   const offlineMatch = {
     createdAt: { $gte: from, $lte: to },
     paymentConfirmed: true,
+    status: { $ne: 'reversed' },
   };
 
   const onlineMatch = {

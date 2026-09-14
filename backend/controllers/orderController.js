@@ -2,15 +2,17 @@ const asyncHandler = require('../utils/asyncHandler');
 const { success } = require('../utils/apiResponse');
 const orderService = require('../services/orderService');
 
+const ApiError = require('../utils/ApiError');
+
 /**
- * POST /api/orders/checkout — Cash on Pickup only. Razorpay checkout goes
- * through POST /api/orders/checkout/razorpay instead, since it returns a
- * different payload shape (razorpayOrderId + key for the Checkout widget).
+ * POST /api/orders/checkout — Cash on Pickup has been deprecated for student checkout.
+ * Only Razorpay online payments are supported.
  */
 const checkoutCash = asyncHandler(async (req, res) => {
-  const io = req.app.get('io');
-  const order = await orderService.createCashOrder(req.user._id, req.body, io);
-  success(res, 201, `Order ${order.orderId} placed successfully`, { order });
+  throw new ApiError(
+    400,
+    'Cash on Pickup / offline payment is not supported for student checkout. Please pay online via Razorpay.'
+  );
 });
 
 const checkoutRazorpay = asyncHandler(async (req, res) => {

@@ -13,5 +13,6 @@ router.get('/', saleListQueryValidation, validate, saleController.listSales);
 router.post('/', saleCreateValidation, validate, saleController.createSale);
 router.get('/:id', saleController.getSale);
 router.get('/:id/invoice', saleController.downloadInvoice);
+router.patch('/:id/undo', saleController.undoSale);
 
 module.exports = router;

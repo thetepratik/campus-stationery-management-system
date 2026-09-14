@@ -495,89 +495,13 @@ const buildOrderFromCart = async (
 
 
 /**
- * Create Cash on Pickup order.
+ * Create Cash on Pickup order — DEPRECATED / REJECTED.
+ * Student checkout only supports online payment via Razorpay.
  */
-const createCashOrder = async (
-  studentId,
-  { pickupTime },
-  io
-) => {
-
-  if (!pickupTime) {
-    throw new ApiError(
-      400,
-      'Please choose a pickup time'
-    );
-  }
-
-
-  const {
-    order,
-    orderId,
-    totalAmount,
-  } =
-    await buildOrderFromCart(
-      studentId,
-      {
-        pickupTime,
-        paymentMethod:
-          PAYMENT_METHOD.CASH_ON_PICKUP,
-      },
-      io
-    );
-
-
-  /* ---------------------------------------------------------
-     NOTIFICATIONS (ADMIN & STUDENT)
-  --------------------------------------------------------- */
-
-  const studentDoc = await Student.findById(studentId).select('name');
-  const studentName = studentDoc?.name || 'A student';
-
-  try {
-    await notifyAdmin(io, {
-      type: 'NEW_ORDER',
-      category: 'orders',
-      priority: 'high',
-      relatedEntity: 'Order',
-      relatedEntityId: order._id,
-      title: '🛒 New Online Order',
-      message: `New order #${orderId} has been placed by ${studentName} for ₹${totalAmount}.`,
-      actionUrl: '/admin/online-orders',
-    });
-
-    await notifyStudent(io, studentId, {
-      type: 'ORDER_PLACED',
-      category: 'orders',
-      priority: 'normal',
-      relatedEntity: 'Order',
-      relatedEntityId: order._id,
-      title: '🛒 Order Placed',
-      message: `Your order #${orderId} has been placed successfully for ₹${totalAmount}.`,
-      actionUrl: '/my-orders',
-    });
-  } catch (notifErr) {
-    console.error('[OrderService] Order notification error:', notifErr.message);
-  }
-
-
-  /* ---------------------------------------------------------
-     POPULATE ORDER
-  --------------------------------------------------------- */
-
-  const populatedOrder =
-    await Order.findById(
-      order._id
-    )
-      .populate('items')
-      .populate(
-        'student',
-        'name rollNumber department'
-      );
-
-
-  return serializeOrder(
-    populatedOrder
+const createCashOrder = async () => {
+  throw new ApiError(
+    400,
+    'Offline/cash payment methods are not supported for student online orders. Only online payment via Razorpay is accepted.'
   );
 };
 
