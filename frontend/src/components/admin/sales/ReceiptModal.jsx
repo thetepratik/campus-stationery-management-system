@@ -19,10 +19,21 @@ const ReceiptModal = ({ open, onClose, sale }) => {
   return (
     <Modal open={open} onClose={onClose} title="Sale Recorded" maxWidth={460}>
       <div id="receipt-print-area">
-        <div className="flex items-center gap-2" style={{ marginBottom: 'var(--space-4)', color: 'var(--color-secondary)' }}>
-          <FiCheckCircle size={20} />
-          <span style={{ fontWeight: 600 }}>Sale {sale.saleId} recorded successfully</span>
-        </div>
+        {sale.status === 'reversed' ? (
+          <div className="flex items-center gap-2" style={{ marginBottom: 'var(--space-4)', color: 'var(--color-danger)' }}>
+            <span className="badge badge--cancelled" style={{ fontSize: '0.85rem' }}>Sale Reversed</span>
+            {sale.reversedAt && (
+              <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
+                on {formatDateTime(sale.reversedAt)}
+              </span>
+            )}
+          </div>
+        ) : (
+          <div className="flex items-center gap-2" style={{ marginBottom: 'var(--space-4)', color: 'var(--color-secondary)' }}>
+            <FiCheckCircle size={20} />
+            <span style={{ fontWeight: 600 }}>Sale {sale.saleId} recorded successfully</span>
+          </div>
+        )}
 
         <div style={{ border: '1px dashed var(--color-border-strong)', borderRadius: 'var(--radius-md)', padding: 'var(--space-5)' }}>
           <div className="flex justify-between" style={{ marginBottom: 'var(--space-2)' }}>

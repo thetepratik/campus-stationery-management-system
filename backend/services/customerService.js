@@ -175,6 +175,7 @@ const getCustomers = async ({
                 $and: [
                   { $ne: ['$$studentRoll', ''] },
                   { $eq: [{ $toUpper: '$rollNumber' }, { $toUpper: '$$studentRoll' }] },
+                  { $ne: ['$status', 'reversed'] },
                 ],
               },
             },
