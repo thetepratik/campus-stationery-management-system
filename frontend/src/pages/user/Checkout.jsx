@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Skeleton from 'react-loading-skeleton';
-import { FiUser, FiClock, FiCreditCard } from 'react-icons/fi';
+import { FiUser, FiClock, FiCreditCard, FiArrowLeft } from 'react-icons/fi';
 
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
@@ -30,6 +30,14 @@ const Checkout = () => {
   const { student } = useAuth();
   const { cart, loading, refresh } = useCart();
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/cart');
+    }
+  };
 
   const [pickupTime, setPickupTime] = useState(toLocalInputValue(getMinPickupTime()));
   const [placing, setPlacing] = useState(false);
@@ -108,7 +116,17 @@ const Checkout = () => {
 
   return (
     <div className="container" style={{ paddingTop: 'var(--space-6)', maxWidth: 900 }}>
-      <h1 style={{ fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-5)' }}>Checkout</h1>
+      <div className="flex items-center gap-3" style={{ marginBottom: 'var(--space-5)' }}>
+        <button
+          type="button"
+          className="btn btn--outline btn--sm"
+          onClick={handleBack}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+        >
+          <FiArrowLeft size={16} /> Back
+        </button>
+        <h1 style={{ fontSize: 'var(--font-size-xl)', margin: 0 }}>Checkout</h1>
+      </div>
 
       {loading ? (
         <Skeleton height={300} borderRadius={16} />

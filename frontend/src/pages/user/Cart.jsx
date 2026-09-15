@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
-import { FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart, FiArrowLeft } from 'react-icons/fi';
 
 import { useCart } from '../../context/CartContext';
 import Button from '../../components/common/Button';
@@ -11,6 +11,14 @@ import OrderSummary from '../../components/user/cart/OrderSummary';
 const Cart = () => {
   const { cart, loading, updateItem, removeItem, applyCoupon, removeCoupon } = useCart();
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/products');
+    }
+  };
 
   if (loading) {
     return (
@@ -37,6 +45,19 @@ const Cart = () => {
 
   return (
     <div className="container" style={{ paddingTop: 'var(--space-6)' }}>
+      <button
+        type="button"
+        className="btn btn--outline btn--sm"
+        onClick={handleBack}
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          marginBottom: 'var(--space-4)',
+        }}
+      >
+        <FiArrowLeft size={16} /> Back
+      </button>
       <h1 style={{ fontSize: 'var(--font-size-xl)', marginBottom: 'var(--space-5)' }}>
         Your Cart ({cart.itemsCount} item{cart.itemsCount !== 1 ? 's' : ''})
       </h1>

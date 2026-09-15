@@ -8,6 +8,7 @@ import {
   FiZap,
   FiMinus,
   FiPlus,
+  FiArrowLeft,
 } from "react-icons/fi";
 
 import { storeApi } from "../../services/storeApi";
@@ -26,6 +27,14 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { isWishlisted, toggle } = useWishlist();
   const { addItem } = useCart();
+
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/products');
+    }
+  };
 
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
@@ -116,6 +125,19 @@ const ProductDetails = () => {
 
   return (
     <div className="container" style={{ paddingTop: "var(--space-6)" }}>
+      <button
+        type="button"
+        className="btn btn--outline btn--sm"
+        onClick={handleBack}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          marginBottom: "var(--space-4)",
+        }}
+      >
+        <FiArrowLeft size={16} /> Back
+      </button>
       <div
         className="flex gap-6"
         style={{ flexWrap: "wrap", marginBottom: "var(--space-8)" }}

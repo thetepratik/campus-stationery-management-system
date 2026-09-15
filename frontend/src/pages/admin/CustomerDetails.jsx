@@ -50,6 +50,14 @@ const CustomerDetails = () => {
     loading: false,
   });
 
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin/customers');
+    }
+  };
+
   // Fetch customer profile & statistics
   const fetchCustomerInfo = useCallback(async () => {
     setLoading(true);
@@ -147,7 +155,7 @@ const CustomerDetails = () => {
           type="button"
           className="btn btn--primary btn--sm"
           style={{ marginTop: 'var(--space-3)' }}
-          onClick={() => navigate('/admin/customers')}
+          onClick={handleBack}
         >
           Back to Customers
         </button>
@@ -183,7 +191,7 @@ const CustomerDetails = () => {
         <button
           type="button"
           className="btn btn--outline btn--sm"
-          onClick={() => navigate('/admin/customers')}
+          onClick={handleBack}
           style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
         >
           <FiArrowLeft size={16} /> Back to Customers

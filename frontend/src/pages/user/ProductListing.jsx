@@ -54,13 +54,16 @@ const ProductListing = () => {
   }, [fetchProducts]);
 
   useEffect(() => {
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      if (debouncedSearch) next.set('search', debouncedSearch);
-      else next.delete('search');
-      next.set('page', '1');
-      return next;
-    });
+    const currentSearch = searchParams.get('search') || '';
+    if (debouncedSearch !== currentSearch) {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        if (debouncedSearch) next.set('search', debouncedSearch);
+        else next.delete('search');
+        next.set('page', '1');
+        return next;
+      }, { replace: true });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
@@ -71,7 +74,7 @@ const ProductListing = () => {
       else next.delete(key);
       next.set('page', '1');
       return next;
-    });
+    }, { replace: true });
   };
 
   const updatePage = (newPage) => {
@@ -79,7 +82,7 @@ const ProductListing = () => {
       const next = new URLSearchParams(prev);
       next.set('page', String(newPage));
       return next;
-    });
+    }, { replace: true });
   };
 
   return (
