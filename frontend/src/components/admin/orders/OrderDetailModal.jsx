@@ -96,8 +96,10 @@ const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
             }`}
           >
             {order.paymentStatus === "paid" || order.status === "completed" || order.status === "collected"
-              ? "successful"
-              : order.paymentStatus}{" "}
+              ? "Paid"
+              : order.paymentStatus === "failed"
+              ? "Failed"
+              : "Pending"}{" "}
             ·{" "}
             {order.paymentMethod === "cash-on-pickup"
               ? "cash"

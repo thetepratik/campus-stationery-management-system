@@ -79,9 +79,13 @@ const Checkout = () => {
         },
         theme: { color: '#4F46E5' },
         handler: async (response) => {
+          setPlacing(true);
           try {
             await paymentApi.verify({
               orderId: order._id,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: response.razorpay_payment_id,
               razorpaySignature: response.razorpay_signature,

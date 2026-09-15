@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'react-toastify';
 import Skeleton from 'react-loading-skeleton';
+import { io } from 'socket.io-client';
 
 import { adminOrderApi } from '../../services/adminOrderApi';
 import useDebounce from '../../hooks/useDebounce';
@@ -39,6 +40,42 @@ const OnlineOrders = () => {
 
   useEffect(() => {
     fetchOrders();
+  }, [fetchOrders]);
+
+  // Real-time synchronization for Admin Orders
+  useEffect(() => {
+    const socketUrl =
+      import.meta.env.VITE_SOCKET_URL ||
+      (import.meta.env.VITE_API_URL
+        ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '')
+        : 'http://localhost:5000');
+
+    const socket = io(socketUrl, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'],
+    });
+
+    socket.on('connect', () => {
+      socket.emit('join:admin');
+    });
+
+    socket.on('order:update', () => {
+      fetchOrders();
+    });
+
+    socket.on('payment:success', () => {
+      fetchOrders();
+    });
+
+    socket.on('notification:new', (notif) => {
+      if (notif?.category === 'payments' || notif?.category === 'orders') {
+        fetchOrders();
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, [fetchOrders]);
 
   const handleView = async (order) => {

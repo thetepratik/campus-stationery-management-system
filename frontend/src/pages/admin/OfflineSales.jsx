@@ -145,9 +145,9 @@ const OfflineSales = () => {
         open={step === 'stock-confirm'}
         onClose={() => setStep('idle')}
         onConfirm={confirmFinalizeSale}
-        title="Confirm Sale"
-        message="This action will permanently reduce stock and save the sale. This cannot be undone. Do you want to continue?"
-        confirmLabel="Yes, Confirm Sale"
+        title="Confirm Offline Sale?"
+        message="This action will permanently record the sale, reduce product stock, increase sold quantity, and update sales/revenue records. Do you want to continue?"
+        confirmLabel="Confirm Sale"
         variant="danger"
         loading={submitting}
       />

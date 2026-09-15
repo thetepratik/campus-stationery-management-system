@@ -67,7 +67,7 @@ const SalesHistoryTable = ({ sales = [], onView, onUndo }) => {
                       onClick={() => onUndo(s)}
                       title="Undo this sale"
                     >
-                      Undo Sale
+                      ↩ Undo Sale
                     </button>
                   ) : (
                     <span

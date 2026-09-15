@@ -44,8 +44,10 @@ const OrderTable = ({ orders = [], onView, onDelete }) => {
                   }`}
                 >
                   {o.paymentStatus === 'paid' || o.status === 'completed' || o.status === 'collected'
-                    ? 'successful'
-                    : o.paymentStatus}
+                    ? 'Paid'
+                    : o.paymentStatus === 'failed'
+                    ? 'Failed'
+                    : 'Pending'}
                 </span>
                 <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase', marginTop: 2 }}>
                   {o.paymentMethod === 'cash-on-pickup' ? 'cash' : o.paymentMethod}

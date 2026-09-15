@@ -97,7 +97,7 @@ const SalesHistory = () => {
         onClose={() => !undoing && setSaleToUndo(null)}
         onConfirm={handleConfirmUndo}
         title="Undo this sale?"
-        message="This will restore the sold quantity to inventory, reverse the sale amount from revenue, and mark the sale as reversed."
+        message="This will restore the sold quantity to inventory and reverse this sale from your sales/revenue calculations. The original sale record will be retained for audit purposes."
         confirmLabel="Undo Sale"
         variant="danger"
         loading={undoing}

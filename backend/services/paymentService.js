@@ -74,6 +74,33 @@ const markOrderAsPaid = async (payment, razorpayPaymentId, io, source = 'Razorpa
 
   await order.save();
 
+  // Socket.IO real-time event emission
+  if (io) {
+    try {
+      io.to('admin-room').emit('order:update', {
+        orderId: order._id,
+        order,
+        paymentStatus: PAYMENT_STATUS.PAID,
+        status: order.status,
+      });
+      io.to('admin-room').emit('payment:success', {
+        orderId: order._id,
+        order,
+        paymentStatus: PAYMENT_STATUS.PAID,
+      });
+      if (order.student) {
+        io.to(`student-${order.student}`).emit('order:update', {
+          orderId: order._id,
+          order,
+          paymentStatus: PAYMENT_STATUS.PAID,
+          status: order.status,
+        });
+      }
+    } catch (socketErr) {
+      console.error('[Payment] Socket emission error:', socketErr.message);
+    }
+  }
+
   // Notify admin and student
   try {
     await notifyAdmin(io, {
@@ -186,9 +213,9 @@ const verifyCheckoutPayment = async (
   }
 
   /*
-   * If already captured, don't process again.
+   * If already captured or paid, don't process again.
    */
-  if (payment.status === 'captured') {
+  if (payment.status === 'captured' || payment.status === 'paid') {
     return order;
   }
 

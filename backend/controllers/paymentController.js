@@ -46,12 +46,10 @@ const verifyPayment = asyncHandler(async (req, res) => {
   // Get data sent by React
   // -------------------------------------------------------
 
-  const {
-    orderId,
-    razorpay_payment_id,
-    razorpay_order_id,
-    razorpay_signature,
-  } = req.body || {};
+  const orderId = req.body?.orderId;
+  const razorpayPaymentId = req.body?.razorpay_payment_id || req.body?.razorpayPaymentId;
+  const razorpayOrderId = req.body?.razorpay_order_id || req.body?.razorpayOrderId;
+  const razorpaySignature = req.body?.razorpay_signature || req.body?.razorpaySignature;
 
   // -------------------------------------------------------
   // Validate required fields
@@ -64,21 +62,21 @@ const verifyPayment = asyncHandler(async (req, res) => {
     );
   }
 
-  if (!razorpay_payment_id) {
+  if (!razorpayPaymentId) {
     throw new ApiError(
       400,
       'Razorpay payment ID is required.'
     );
   }
 
-  if (!razorpay_order_id) {
+  if (!razorpayOrderId) {
     throw new ApiError(
       400,
       'Razorpay order ID is required.'
     );
   }
 
-  if (!razorpay_signature) {
+  if (!razorpaySignature) {
     throw new ApiError(
       400,
       'Razorpay payment signature is required.'
@@ -94,12 +92,9 @@ const verifyPayment = asyncHandler(async (req, res) => {
       req.user._id,
       {
         orderId,
-
-        // Convert Razorpay field names to the names
-        // expected by paymentService.js
-        razorpayOrderId: razorpay_order_id,
-        razorpayPaymentId: razorpay_payment_id,
-        razorpaySignature: razorpay_signature,
+        razorpayOrderId,
+        razorpayPaymentId,
+        razorpaySignature,
       },
       io
     );

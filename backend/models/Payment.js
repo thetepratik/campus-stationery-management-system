@@ -149,6 +149,7 @@ const paymentSchema = new mongoose.Schema(
         'pending',
         'authorized',
         'captured',
+        'paid',
         'failed',
         'refunded',
       ],

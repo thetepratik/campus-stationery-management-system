@@ -242,13 +242,13 @@ const MyOrders = () => {
                         {order.paymentStatus === "paid" ||
                         order.status === "completed" ||
                         order.status === "collected"
-                          ? "successful"
-                          : order.paymentStatus}
+                          ? "Paid"
+                          : order.paymentStatus === "failed"
+                          ? "Failed"
+                          : "Pending"}
                       </strong>{" "}
                       (
-                      {order.paymentMethod === "cash-on-pickup"
-                        ? "Cash on Pickup"
-                        : "Razorpay"}
+                        Razorpay
                       )
                     </div>
                   </div>
