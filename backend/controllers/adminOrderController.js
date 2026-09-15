@@ -1,6 +1,12 @@
 const asyncHandler = require('../utils/asyncHandler');
 const { success } = require('../utils/apiResponse');
 const adminOrderService = require('../services/adminOrderService');
+const Order = require('../models/Order');
+const Payment = require('../models/Payment');
+const ShopSettings = require('../models/ShopSettings');
+const { streamOrderInvoice } = require('../services/invoicePdfService');
+const mongoose = require('mongoose');
+const ApiError = require('../utils/ApiError');
 
 const listOrders = asyncHandler(async (req, res) => {
   const { items, meta } = await adminOrderService.listAllOrders(req.query);
@@ -29,4 +35,32 @@ const deleteOrder = asyncHandler(async (req, res) => {
   success(res, 200, `Order ${result.orderId} removed successfully`, result);
 });
 
-module.exports = { listOrders, getOrder, updateStatus, cancelOrder, deleteOrder };
+const downloadInvoice = asyncHandler(async (req, res) => {
+  const query = mongoose.Types.ObjectId.isValid(req.params.id)
+    ? { _id: req.params.id }
+    : { orderId: req.params.id };
+
+  const order = await Order.findOne(query)
+    .populate('student', 'name rollNumber department mobile email')
+    .populate('items');
+
+  if (!order) {
+    throw new ApiError(404, 'Order not found');
+  }
+
+  const [payment, shopSettings] = await Promise.all([
+    Payment.findOne({ order: order._id }).lean(),
+    ShopSettings.findOne().lean(),
+  ]);
+
+  streamOrderInvoice(order, payment, res, shopSettings);
+});
+
+module.exports = {
+  listOrders,
+  getOrder,
+  updateStatus,
+  cancelOrder,
+  deleteOrder,
+  downloadInvoice,
+};

@@ -1,4 +1,5 @@
 import api from './api';
+import { triggerBlobDownload } from '../utils/downloadPdf';
 
 const buildQueryString = (params) => {
   const query = new URLSearchParams();
@@ -14,4 +15,10 @@ export const saleApi = {
   create: (payload) => api.post('/sales', payload),
   undo: (id, reason) => api.patch(`/sales/${id}/undo`, { reason }),
   invoiceUrl: (id) => `/api/sales/${id}/invoice`,
+  downloadInvoice: async (id, saleId) => {
+    const blob = await api.get(`/sales/${id}/invoice`, { responseType: 'blob' });
+    const filename = `invoice-${saleId || id}.pdf`;
+    triggerBlobDownload(blob, filename);
+    return blob;
+  },
 };

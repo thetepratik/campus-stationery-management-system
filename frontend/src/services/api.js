@@ -36,17 +36,30 @@ api.interceptors.response.use(
   (response) => {
     // Your backend returns:
     // { success, message, data, meta }
+    // Or binary Blob for PDF downloads.
     // So return response.data directly.
     return response.data;
   },
 
-  (error) => {
-    const message =
-      error.response?.data?.message ||
-      (error.response?.data?.errors &&
-        error.response.data.errors[0]) ||
-      error.message ||
-      "Something went wrong. Please try again.";
+  async (error) => {
+    let message = "Something went wrong. Please try again.";
+
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text();
+        const parsed = JSON.parse(text);
+        message = parsed.message || (parsed.errors && parsed.errors[0]) || message;
+      } catch {
+        message = error.response.statusText || message;
+      }
+    } else {
+      message =
+        error.response?.data?.message ||
+        (error.response?.data?.errors &&
+          error.response.data.errors[0]) ||
+        error.message ||
+        message;
+    }
 
     return Promise.reject({
       message,

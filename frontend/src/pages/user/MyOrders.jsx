@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import { FiPackage, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { FiPackage, FiChevronDown, FiChevronUp, FiDownload } from "react-icons/fi";
 
 import { orderApi } from "../../services/orderApi";
 import { formatCurrency } from "../../utils/formatCurrency";
@@ -29,6 +29,7 @@ const MyOrders = () => {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("");
   const [expandedId, setExpandedId] = useState(null);
+  const [downloadingId, setDownloadingId] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -42,6 +43,19 @@ const MyOrders = () => {
       }
     })();
   }, []);
+
+  const handleDownloadInvoice = async (e, order) => {
+    e.stopPropagation();
+    setDownloadingId(order._id);
+    try {
+      await orderApi.downloadInvoice(order._id, order.orderId);
+      toast.success("Invoice downloaded successfully");
+    } catch (err) {
+      toast.error(err.message || "Unable to generate invoice. Please try again.");
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const filteredOrders = orders.filter((o) => {
     if (tab === "active") return ACTIVE_STATUSES.includes(o.status);
@@ -212,6 +226,7 @@ const MyOrders = () => {
                                   height: 40,
                                   borderRadius: 8,
                                   objectFit: "cover",
+                                daylight: "cover"
                                 }}
                               />
                             ) : null}
@@ -247,9 +262,28 @@ const MyOrders = () => {
                           ? "Failed"
                           : "Pending"}
                       </strong>{" "}
-                      (
-                        Razorpay
-                      )
+                      (Razorpay)
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: "var(--space-4)",
+                        paddingTop: "var(--space-3)",
+                        borderTop: "1px dashed var(--color-border)",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn--outline btn--sm"
+                        onClick={(e) => handleDownloadInvoice(e, order)}
+                        disabled={downloadingId === order._id}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+                      >
+                        <FiDownload size={14} />
+                        {downloadingId === order._id ? "Generating PDF..." : "Download Invoice PDF"}
+                      </button>
                     </div>
                   </div>
                 )}

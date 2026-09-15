@@ -1,12 +1,28 @@
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { FiEye, FiDownload } from 'react-icons/fi';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatDateTime } from '../../../utils/formatDate';
 import { saleApi } from '../../../services/saleApi';
 
 const SalesHistoryTable = ({ sales = [], onView, onUndo }) => {
+  const [downloadingId, setDownloadingId] = useState(null);
+
   if (!sales.length) {
     return <div className="empty-state" style={{ padding: 'var(--space-8) 0' }}>No sales found</div>;
   }
+
+  const handleDownloadInvoice = async (s) => {
+    setDownloadingId(s._id);
+    try {
+      await saleApi.downloadInvoice(s._id, s.saleId);
+      toast.success('Invoice downloaded successfully');
+    } catch (err) {
+      toast.error(err.message || 'Unable to generate invoice. Please try again.');
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   return (
     <div className="table-wrapper">
@@ -49,7 +65,8 @@ const SalesHistoryTable = ({ sales = [], onView, onUndo }) => {
                   </button>
                   <button
                     className="btn btn--ghost btn--sm btn--icon"
-                    onClick={() => window.open(saleApi.invoiceUrl(s._id), '_blank')}
+                    onClick={() => handleDownloadInvoice(s)}
+                    disabled={downloadingId === s._id}
                     title="Download invoice"
                   >
                     <FiDownload size={14} />

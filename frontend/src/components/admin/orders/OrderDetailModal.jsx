@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { FiCheck, FiX, FiClock, FiTrash2 } from "react-icons/fi";
+import { FiCheck, FiX, FiClock, FiTrash2, FiDownload } from "react-icons/fi";
 import Modal from "../../common/Modal";
 import Button from "../../common/Button";
 import { formatCurrency } from "../../../utils/formatCurrency";
@@ -15,6 +15,7 @@ import { adminOrderApi } from "../../../services/adminOrderApi";
 const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
   const [advancing, setAdvancing] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
   const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
 
@@ -50,6 +51,18 @@ const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
       toast.error(err.message);
     } finally {
       setCancelling(false);
+    }
+  };
+
+  const handleDownloadInvoice = async () => {
+    setDownloadingInvoice(true);
+    try {
+      await adminOrderApi.downloadInvoice(order._id, order.orderId);
+      toast.success("Invoice downloaded successfully");
+    } catch (err) {
+      toast.error(err.message || "Unable to generate invoice. Please try again.");
+    } finally {
+      setDownloadingInvoice(false);
     }
   };
 
@@ -206,8 +219,16 @@ const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3 items-center justify-between">
-          <div>
+        <div className="flex gap-3 items-center justify-between flex-wrap">
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={handleDownloadInvoice}
+              loading={downloadingInvoice}
+              title="Download Invoice PDF"
+            >
+              <FiDownload size={14} /> Invoice PDF
+            </Button>
             {onDelete && (
               <Button
                 variant="outline"

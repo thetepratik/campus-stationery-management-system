@@ -19,9 +19,14 @@ const getSale = asyncHandler(async (req, res) => {
   success(res, 200, 'Sale fetched', { sale });
 });
 
+const ShopSettings = require('../models/ShopSettings');
+
 const downloadInvoice = asyncHandler(async (req, res) => {
-  const sale = await saleService.getSaleById(req.params.id);
-  streamSaleInvoice(sale, res);
+  const [sale, shopSettings] = await Promise.all([
+    saleService.getSaleById(req.params.id),
+    ShopSettings.findOne().lean(),
+  ]);
+  streamSaleInvoice(sale, res, shopSettings);
 });
 
 const undoSale = asyncHandler(async (req, res) => {

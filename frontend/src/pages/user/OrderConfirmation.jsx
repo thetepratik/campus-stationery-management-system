@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import { FiCheckCircle, FiClock, FiMapPin } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiMapPin, FiDownload } from "react-icons/fi";
 
 import { orderApi } from "../../services/orderApi";
 import { formatCurrency } from "../../utils/formatCurrency";
@@ -12,6 +12,7 @@ const OrderConfirmation = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -25,6 +26,19 @@ const OrderConfirmation = () => {
       }
     })();
   }, [id]);
+
+  const handleDownloadInvoice = async () => {
+    if (!order) return;
+    setDownloading(true);
+    try {
+      await orderApi.downloadInvoice(order._id, order.orderId);
+      toast.success("Invoice downloaded successfully");
+    } catch (err) {
+      toast.error(err.message || "Unable to generate invoice. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -150,7 +164,17 @@ const OrderConfirmation = () => {
           </div>
         </div>
 
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center flex-wrap">
+          <button
+            type="button"
+            className="btn btn--outline"
+            onClick={handleDownloadInvoice}
+            disabled={downloading}
+            style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+          >
+            <FiDownload size={16} />
+            {downloading ? "Downloading..." : "Download Invoice PDF"}
+          </button>
           <Link to="/products" className="btn btn--outline">
             Continue Shopping
           </Link>

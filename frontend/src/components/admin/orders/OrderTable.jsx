@@ -1,9 +1,9 @@
-import { FiEye, FiTrash2 } from 'react-icons/fi';
+import { FiEye, FiTrash2, FiDownload } from 'react-icons/fi';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatDateTime } from '../../../utils/formatDate';
 import { STATUS_BADGE_MAP, STATUS_LABELS } from '../../../utils/orderStatus';
 
-const OrderTable = ({ orders = [], onView, onDelete }) => {
+const OrderTable = ({ orders = [], onView, onDownloadInvoice, onDelete }) => {
   if (!orders.length) {
     return <div className="empty-state" style={{ padding: 'var(--space-8) 0' }}>No orders found</div>;
   }
@@ -62,6 +62,16 @@ const OrderTable = ({ orders = [], onView, onDelete }) => {
                   <button className="btn btn--ghost btn--sm btn--icon" onClick={() => onView(o)} title="View order" aria-label="View order">
                     <FiEye size={14} />
                   </button>
+                  {onDownloadInvoice && (
+                    <button
+                      className="btn btn--ghost btn--sm btn--icon"
+                      onClick={() => onDownloadInvoice(o)}
+                      title="Download Invoice PDF"
+                      aria-label="Download Invoice PDF"
+                    >
+                      <FiDownload size={14} />
+                    </button>
+                  )}
                   {onDelete && (
                     <button
                       className="btn btn--ghost btn--sm btn--icon"

@@ -13,5 +13,6 @@ router.post('/checkout', checkoutValidation, validate, orderController.checkoutC
 router.post('/checkout/razorpay', checkoutValidation, validate, orderController.checkoutRazorpay);
 router.get('/', orderController.listMyOrders);
 router.get('/:id', orderController.getMyOrder);
+router.get('/:id/invoice', orderController.downloadInvoice);
 
 module.exports = router;

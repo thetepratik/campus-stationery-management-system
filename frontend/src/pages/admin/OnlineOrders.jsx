@@ -110,6 +110,15 @@ const OnlineOrders = () => {
     }
   };
 
+  const handleDownloadInvoice = async (order) => {
+    try {
+      await adminOrderApi.downloadInvoice(order._id, order.orderId);
+      toast.success('Invoice downloaded successfully');
+    } catch (err) {
+      toast.error(err.message || 'Unable to generate invoice. Please try again.');
+    }
+  };
+
   return (
     <div>
       <div className="card panel">
@@ -126,7 +135,12 @@ const OnlineOrders = () => {
           <Skeleton height={48} count={6} style={{ marginBottom: 8 }} />
         ) : (
           <>
-            <OrderTable orders={orders} onView={handleView} onDelete={(order) => setDeleteTarget(order)} />
+            <OrderTable
+              orders={orders}
+              onView={handleView}
+              onDownloadInvoice={handleDownloadInvoice}
+              onDelete={(order) => setDeleteTarget(order)}
+            />
             <Pagination meta={meta} onPageChange={(page) => setFilters((f) => ({ ...f, page }))} />
           </>
         )}

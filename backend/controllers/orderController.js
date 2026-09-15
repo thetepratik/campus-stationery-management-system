@@ -1,8 +1,12 @@
 const asyncHandler = require('../utils/asyncHandler');
 const { success } = require('../utils/apiResponse');
 const orderService = require('../services/orderService');
-
 const ApiError = require('../utils/ApiError');
+const Order = require('../models/Order');
+const Payment = require('../models/Payment');
+const ShopSettings = require('../models/ShopSettings');
+const { streamOrderInvoice } = require('../services/invoicePdfService');
+const mongoose = require('mongoose');
 
 /**
  * POST /api/orders/checkout — Cash on Pickup has been deprecated for student checkout.
@@ -23,12 +27,44 @@ const checkoutRazorpay = asyncHandler(async (req, res) => {
 
 const getMyOrder = asyncHandler(async (req, res) => {
   const order = await orderService.getOrderForStudent(req.user._id, req.params.id);
-  success(res, 200, 'Order fetched', { order });
+  success(res, 200, 'Order retrieved successfully', { order });
 });
 
 const listMyOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.listOrdersForStudent(req.user._id);
-  success(res, 200, 'Orders fetched', { orders });
+  success(res, 200, 'Orders retrieved successfully', { orders });
 });
 
-module.exports = { checkoutCash, checkoutRazorpay, getMyOrder, listMyOrders };
+const downloadInvoice = asyncHandler(async (req, res) => {
+  const query = mongoose.Types.ObjectId.isValid(req.params.id)
+    ? { _id: req.params.id }
+    : { orderId: req.params.id };
+
+  const order = await Order.findOne(query)
+    .populate('student', 'name rollNumber department mobile email')
+    .populate('items');
+
+  if (!order) {
+    throw new ApiError(404, 'Order not found');
+  }
+
+  // Student authorization / ownership check
+  if (order.student?._id?.toString() !== req.user._id?.toString()) {
+    throw new ApiError(403, 'Not authorized to access this invoice');
+  }
+
+  const [payment, shopSettings] = await Promise.all([
+    Payment.findOne({ order: order._id }).lean(),
+    ShopSettings.findOne().lean(),
+  ]);
+
+  streamOrderInvoice(order, payment, res, shopSettings);
+});
+
+module.exports = {
+  checkoutCash,
+  checkoutRazorpay,
+  getMyOrder,
+  listMyOrders,
+  downloadInvoice,
+};

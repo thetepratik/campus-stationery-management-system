@@ -11,6 +11,7 @@ router.use(verifyToken, requireRole('admin'));
 
 router.get('/', adminOrderController.listOrders);
 router.get('/:id', adminOrderController.getOrder);
+router.get('/:id/invoice', adminOrderController.downloadInvoice);
 router.patch('/:id/status', updateStatusValidation, validate, adminOrderController.updateStatus);
 router.patch('/:id/cancel', cancelOrderValidation, validate, adminOrderController.cancelOrder);
 router.delete('/:id', adminOrderController.deleteOrder);

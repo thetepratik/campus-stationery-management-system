@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import { FiPrinter, FiDownload, FiCheckCircle } from 'react-icons/fi';
 import Modal from '../../common/Modal';
 import Button from '../../common/Button';
@@ -6,14 +8,24 @@ import { formatDateTime } from '../../../utils/formatDate';
 import { saleApi } from '../../../services/saleApi';
 
 const ReceiptModal = ({ open, onClose, sale }) => {
+  const [downloading, setDownloading] = useState(false);
+
   if (!sale) return null;
 
   const handlePrint = () => {
     window.print();
   };
 
-  const handleDownloadInvoice = () => {
-    window.open(saleApi.invoiceUrl(sale._id), '_blank');
+  const handleDownloadInvoice = async () => {
+    setDownloading(true);
+    try {
+      await saleApi.downloadInvoice(sale._id, sale.saleId);
+      toast.success('Invoice downloaded successfully');
+    } catch (err) {
+      toast.error(err.message || 'Unable to generate invoice. Please try again.');
+    } finally {
+      setDownloading(false);
+    }
   };
 
   return (
@@ -74,7 +86,7 @@ const ReceiptModal = ({ open, onClose, sale }) => {
       </div>
 
       <div className="flex gap-3 justify-end" style={{ marginTop: 'var(--space-5)' }}>
-        <Button variant="outline" onClick={handleDownloadInvoice}>
+        <Button variant="outline" onClick={handleDownloadInvoice} loading={downloading}>
           <FiDownload size={14} /> Invoice PDF
         </Button>
         <Button variant="outline" onClick={handlePrint}>
