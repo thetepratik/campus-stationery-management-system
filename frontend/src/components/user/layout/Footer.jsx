@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { FiMapPin, FiPhone, FiMail, FiShield, FiBookOpen } from 'react-icons/fi';
+import { FiMapPin, FiPhone, FiMail, FiShield } from 'react-icons/fi';
+import { FaGraduationCap } from 'react-icons/fa';
 
 const QUICK_LINKS = [
   { label: 'Home', to: '/' },
@@ -15,15 +16,15 @@ const Footer = () => (
         {/* Brand info */}
         <div>
           <div className="flex items-center gap-2" style={{ marginBottom: 'var(--space-2)' }}>
-            <div className="modern-navbar__logo-icon" style={{ width: 30, height: 30 }}>
-              <FiBookOpen size={16} />
+            <div className="modern-navbar__logo-icon" style={{ width: 32, height: 32 }}>
+              <FaGraduationCap size={16} />
             </div>
-            <div style={{ fontWeight: 700, fontSize: 'var(--font-size-base)' }}>
-              Campus Stationery
+            <div style={{ fontWeight: 800, fontSize: 'var(--font-size-base)' }}>
+              CampusKart
             </div>
           </div>
           <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-primary)', fontWeight: 600, marginBottom: 'var(--space-3)' }}>
-            Your Stationery, Our Priority
+            Your Stationery, Your Priority
           </div>
           <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', maxWidth: 300, lineHeight: 1.6 }}>
             Your one-stop campus supply shop for notebooks, pens, calculators, and study essentials.
@@ -86,7 +87,7 @@ const Footer = () => (
       </div>
 
       <div className="user-footer__bottom">
-        © {new Date().getFullYear()} Campus Stationery. All rights reserved. | Built with care for campus students.
+        © {new Date().getFullYear()} CampusKart. All rights reserved. | Built with care for campus students.
       </div>
     </div>
   </footer>
