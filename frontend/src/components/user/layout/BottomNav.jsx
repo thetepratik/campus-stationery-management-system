@@ -3,7 +3,7 @@ import { FiHome, FiGrid, FiShoppingCart, FiList, FiUser } from 'react-icons/fi';
 
 const ITEMS = [
   { to: '/', label: 'Home', icon: FiHome, end: true },
-  { to: '/products', label: 'Categories', icon: FiGrid },
+  { to: '/products', label: 'Shop', icon: FiGrid },
   { to: '/cart', label: 'Cart', icon: FiShoppingCart },
   { to: '/my-orders', label: 'Orders', icon: FiList },
   { to: '/profile', label: 'Profile', icon: FiUser },

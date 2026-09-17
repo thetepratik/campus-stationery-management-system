@@ -22,9 +22,10 @@ const DEFAULT_FILTERS = { search: '', category: '', status: '', availability: ''
 const Products = () => {
   const [tab, setTab] = useState('products');
 
-  // Shared category data (used by product filters/forms and the categories tab)
+  // Shared category & brand data (used by product filters/forms and the categories tab)
   const [categories, setCategories] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [brands, setBrands] = useState([]);
 
   // Products tab state
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
@@ -56,6 +57,16 @@ const Products = () => {
     }
   }, []);
 
+  const fetchBrands = useCallback(async () => {
+    try {
+      const res = await productApi.getBrands();
+      setBrands(res.data.brands || []);
+    } catch {
+      // Ignore brand fetch error
+    }
+  }, []);
+
+
   const fetchProducts = useCallback(async () => {
     setProductsLoading(true);
     try {
@@ -71,7 +82,8 @@ const Products = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [fetchCategories]);
+    fetchBrands();
+  }, [fetchCategories, fetchBrands]);
 
   useEffect(() => {
     fetchProducts();
@@ -174,7 +186,23 @@ const Products = () => {
 
       {tab === 'products' ? (
         <div className="card panel">
-          <ProductFilters filters={filters} onChange={setFilters} categories={categories} />
+          <ProductFilters
+            filters={filters}
+            onChange={setFilters}
+            categories={categories}
+            brands={brands}
+          />
+
+          <div
+            className="flex items-center justify-between"
+            style={{ marginBottom: 'var(--space-3)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}
+          >
+            <span>
+              {productsLoading
+                ? 'Loading catalog...'
+                : `Showing ${meta?.totalCount ?? products.length} products`}
+            </span>
+          </div>
 
           <BulkActionsBar
             selectedCount={selectedIds.length}

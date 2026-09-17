@@ -65,6 +65,13 @@ export const storeApi = {
     return await api.get(
       `/store/products?search=${encodeURIComponent(keyword)}`
     );
+  },
+
+  /**
+   * Get Active Brands
+   */
+  getBrands: async () => {
+    return await api.get('/store/brands');
   }
 };
 

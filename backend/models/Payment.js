@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema(
   {
-    // -----------------------------------------------------
-    // Application Order
-    // -----------------------------------------------------
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Order',
@@ -13,25 +10,13 @@ const paymentSchema = new mongoose.Schema(
       index: true,
     },
 
-    // -----------------------------------------------------
-    // Student
-    // -----------------------------------------------------
-    // Keeping this reference makes it easier to find
-    // payments belonging to a particular student.
-    //
-    // If your existing Order already contains student and
-    // you don't want duplicate data, this field can be
-    // removed. It is useful for reporting, however.
-    //
+
     student: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Student',
       index: true,
     },
 
-    // -----------------------------------------------------
-    // Razorpay Order
-    // -----------------------------------------------------
     razorpayOrderId: {
       type: String,
       trim: true,
@@ -39,9 +24,6 @@ const paymentSchema = new mongoose.Schema(
       sparse: true,
     },
 
-    // -----------------------------------------------------
-    // Razorpay Payment
-    // -----------------------------------------------------
     razorpayPaymentId: {
       type: String,
       trim: true,

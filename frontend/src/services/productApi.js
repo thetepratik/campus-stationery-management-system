@@ -30,4 +30,6 @@ export const productApi = {
   bulkDelete: (productIds) => api.post('/products/bulk-delete', { productIds }),
   bulkUpdateStatus: (productIds, status) => api.post('/products/bulk-status', { productIds, status }),
   bulkPriceUpdate: (productIds, mode, value) => api.post('/products/bulk-price', { productIds, mode, value }),
+  getBrands: () => api.get('/products/brands'),
 };
+

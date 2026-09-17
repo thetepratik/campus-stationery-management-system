@@ -74,4 +74,16 @@ const getRelatedProducts = async (productId, categoryId, limit = 4) => {
   return serializeProducts(related);
 };
 
-module.exports = { getHomeData, getStoreProducts, getStoreProductById, getRelatedProducts };
+/**
+ * Unique active brands for the student/user filter dropdown
+ */
+const getStoreBrands = async () => {
+  const brands = await Product.distinct('brand', { status: 'active' });
+  return brands
+    .filter((b) => b && typeof b === 'string' && b.trim().length > 0)
+    .map((b) => b.trim())
+    .filter((val, idx, self) => self.indexOf(val) === idx)
+    .sort((a, b) => a.localeCompare(b));
+};
+
+module.exports = { getHomeData, getStoreProducts, getStoreProductById, getRelatedProducts, getStoreBrands };

@@ -18,4 +18,9 @@ const getProduct = asyncHandler(async (req, res) => {
   success(res, 200, 'Product fetched', { product, related });
 });
 
-module.exports = { getHome, listProducts, getProduct };
+const getBrands = asyncHandler(async (req, res) => {
+  const brands = await storeService.getStoreBrands();
+  success(res, 200, 'Brands fetched', { brands });
+});
+
+module.exports = { getHome, listProducts, getProduct, getBrands };

@@ -43,6 +43,7 @@ router.post(
   productController.bulkPriceUpdate
 );
 
+router.get('/brands', productController.getBrands);
 router.get('/:id', productController.getProduct);
 
 router.post(

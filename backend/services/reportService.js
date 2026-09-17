@@ -97,7 +97,6 @@ const getSalesReportData = async (query = {}) => {
     $or: [{ paymentStatus: 'refunded' }, { status: 'refunded' }],
   };
 
-  // Run all primary aggregations concurrently
   const [
     offlineSummaryAgg,
     onlineSummaryAgg,

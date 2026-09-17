@@ -8,11 +8,7 @@ const inventoryService = require('./inventoryService');
 const { notifyAdmin } = require('./notificationService');
 const { serializeDocument, serializeImage } = require('../utils/imageUtils');
 
-/**
- * Generates the next sequential sale ID (S0001, S0002, ...) based on the most
- * recently inserted Sale document, so IDs stay human-readable and ordered
- * regardless of how createdAt timestamps are backdated (e.g. by the seeder).
- */
+
 const generateNextSaleId = async () => {
   const lastSale = await Sale.findOne().sort({ _id: -1 }).select('saleId').lean();
   let nextNum = 1;

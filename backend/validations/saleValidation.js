@@ -5,9 +5,7 @@ const saleCreateValidation = [
   body('items').isArray({ min: 1 }).withMessage('At least one item is required'),
   body('items.*.productId').isMongoId().withMessage('Each item needs a valid product'),
   body('items.*.quantity').isInt({ min: 1 }).withMessage('Each item quantity must be at least 1'),
-  body('paymentMethod')
-    .isIn(Object.values(OFFLINE_PAYMENT_METHOD))
-    .withMessage('Invalid payment method'),
+  body('paymentMethod').isIn(Object.values(OFFLINE_PAYMENT_METHOD)).withMessage('Invalid payment method'),
   body('customerName').optional().trim(),
   body('rollNumber').optional().trim(),
   body('department').optional().trim(),

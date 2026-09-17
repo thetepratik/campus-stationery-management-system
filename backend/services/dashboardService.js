@@ -27,10 +27,7 @@ const daysAgo = (n) => {
   return d;
 };
 
-/**
- * Top-of-dashboard stat tiles: inventory counts, today's sales/revenue,
- * monthly revenue, order status counts, inventory value.
- */
+
 const getSummary = async () => {
   const today = startOfToday();
   const monthStart = startOfMonth();

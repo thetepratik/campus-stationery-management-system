@@ -6,6 +6,7 @@ const { slugify, generateSku, generateBarcode } = require('../utils/generateId')
 const { serializeDocument } = require('../utils/imageUtils');
 
 const ALLOWED_SORT_FIELDS = {
+  relevance: { createdAt: -1 },
   newest: { createdAt: -1 },
   oldest: { createdAt: 1 },
   'name-asc': { name: 1 },
@@ -18,27 +19,50 @@ const ALLOWED_SORT_FIELDS = {
 };
 
 /**
- * Builds the Mongo filter object from query params: search, category, status,
- * availability (in-stock/low-stock/out-of-stock).
+ * Builds the Mongo filter object from query params: search, category, brand,
+ * minPrice, maxPrice, status, availability (in-stock/low-stock/out-of-stock).
  */
 const buildFilter = (query) => {
   const filter = {};
 
-  if (query.search) {
+  if (query.search && query.search.trim()) {
+    const term = query.search.trim();
     filter.$or = [
-      { name: { $regex: query.search, $options: 'i' } },
-      { brand: { $regex: query.search, $options: 'i' } },
-      { sku: { $regex: query.search, $options: 'i' } },
+      { name: { $regex: term, $options: 'i' } },
+      { brand: { $regex: term, $options: 'i' } },
+      { sku: { $regex: term, $options: 'i' } },
+      { barcode: { $regex: term, $options: 'i' } },
     ];
   }
 
   if (query.category) filter.category = query.category;
+  if (query.brand && query.brand.trim()) filter.brand = query.brand.trim();
   if (query.status && ['active', 'inactive'].includes(query.status)) filter.status = query.status;
 
-  if (query.availability === 'in-stock') filter.currentStock = { $gt: 0 };
-  else if (query.availability === 'out-of-stock') filter.currentStock = { $lte: 0 };
-  else if (query.availability === 'low-stock') {
+  if (
+    (query.minPrice !== undefined && query.minPrice !== '') ||
+    (query.maxPrice !== undefined && query.maxPrice !== '')
+  ) {
+    filter.sellingPrice = {};
+    if (query.minPrice !== undefined && query.minPrice !== '') {
+      const min = Number(query.minPrice);
+      if (!isNaN(min)) filter.sellingPrice.$gte = min;
+    }
+    if (query.maxPrice !== undefined && query.maxPrice !== '') {
+      const max = Number(query.maxPrice);
+      if (!isNaN(max)) filter.sellingPrice.$lte = max;
+    }
+    if (Object.keys(filter.sellingPrice).length === 0) {
+      delete filter.sellingPrice;
+    }
+  }
+
+  if (query.availability === 'in-stock') {
+    filter.$expr = { $gt: ['$currentStock', '$minStock'] };
+  } else if (query.availability === 'low-stock') {
     filter.$expr = { $and: [{ $gt: ['$currentStock', 0] }, { $lte: ['$currentStock', '$minStock'] }] };
+  } else if (query.availability === 'out-of-stock') {
+    filter.currentStock = { $lte: 0 };
   }
 
   return filter;
@@ -299,6 +323,15 @@ const bulkPriceUpdate = async (productIds, mode, value) => {
   return bulkOps.length;
 };
 
+const getAllBrands = async () => {
+  const brands = await Product.distinct('brand');
+  return brands
+    .filter((b) => b && typeof b === 'string' && b.trim().length > 0)
+    .map((b) => b.trim())
+    .filter((val, idx, self) => self.indexOf(val) === idx)
+    .sort((a, b) => a.localeCompare(b));
+};
+
 module.exports = {
   listProducts,
   getProductById,
@@ -308,4 +341,6 @@ module.exports = {
   bulkDelete,
   bulkUpdateStatus,
   bulkPriceUpdate,
+  getAllBrands,
 };
+

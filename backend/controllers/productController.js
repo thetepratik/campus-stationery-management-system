@@ -60,6 +60,11 @@ const bulkPriceUpdate = asyncHandler(async (req, res) => {
   success(res, 200, `${count} product(s) price updated successfully`);
 });
 
+const getBrands = asyncHandler(async (req, res) => {
+  const brands = await productService.getAllBrands();
+  success(res, 200, 'Brands fetched successfully', { brands });
+});
+
 module.exports = {
   listProducts,
   getProduct,
@@ -69,4 +74,6 @@ module.exports = {
   bulkDelete,
   bulkUpdateStatus,
   bulkPriceUpdate,
+  getBrands,
 };
+
