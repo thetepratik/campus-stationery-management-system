@@ -17,6 +17,12 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    // Send role hint header if saved in localStorage (avoids ambiguous cookie selection)
+    const savedRole = localStorage.getItem('cs_auth_role');
+    if (savedRole && !config.headers['x-user-role']) {
+      config.headers['x-user-role'] = savedRole;
+    }
+
     // Do NOT manually set Content-Type for FormData.
     // The browser/Axios will automatically set:
     // multipart/form-data; boundary=...

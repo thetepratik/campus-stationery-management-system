@@ -30,6 +30,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     // -----------------------------
     else if (
         url.startsWith("/api/admin") ||
+        url.startsWith("/api/auth/admin") ||
         url.startsWith("/api/products") ||
         url.startsWith("/api/categories") ||
         url.startsWith("/api/inventory") ||
@@ -45,6 +46,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     // -----------------------------
     else if (
         url.startsWith("/api/student") ||
+        url.startsWith("/api/auth/student") ||
         url.startsWith("/api/cart") ||
         url.startsWith("/api/wishlist") ||
         url.startsWith("/api/orders") ||

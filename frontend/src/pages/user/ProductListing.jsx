@@ -363,7 +363,7 @@ const ProductListing = () => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         categories={categories}
-        brands={brands}
+        brands={brands.length > 0 ? brands : [...new Set(products.map((p) => p.brand).filter(Boolean))].sort()}
         filters={{ category, brand, minPrice, maxPrice, availability, sort }}
         onApply={handleApplyDrawer}
         onClear={handleClearAll}

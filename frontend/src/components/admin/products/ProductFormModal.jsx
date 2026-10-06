@@ -72,7 +72,7 @@ const ProductFormModal = ({ open, onClose, onSaved, product, categories = [] }) 
   return (
     <Modal open={open} onClose={onClose} title={isEdit ? 'Edit Product' : 'Add Product'} maxWidth={680}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '0 var(--space-4)' }}>
+        <div className="form-grid-2col">
           <Input
             id="name"
             label="Product Name"
@@ -97,7 +97,7 @@ const ProductFormModal = ({ open, onClose, onSaved, product, categories = [] }) 
           <textarea id="description" className="form-textarea" rows={3} {...register('description')} />
         </div>
 
-        <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '0 var(--space-4)' }}>
+        <div className="form-grid-2col">
           <Input id="sku" label="SKU (auto-generated if blank)" placeholder="SKU-XXXXXX" register={register('sku')} />
           <Input id="barcode" label="Barcode (auto-generated if blank)" register={register('barcode')} />
 

@@ -571,7 +571,7 @@ const Home = () => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         categories={categories}
-        brands={brands}
+        brands={brands.length > 0 ? brands : [...new Set(products.map((p) => p.brand).filter(Boolean))].sort()}
         filters={filters}
         onApply={handleApplyDrawer}
         onClear={() => setFilters(DEFAULT_FILTERS)}
