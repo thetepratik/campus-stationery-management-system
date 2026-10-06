@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi';
 
 import { storeApi } from '../../services/storeApi';
+import { productApi } from '../../services/productApi';
 import { categoryApi } from '../../services/categoryApi';
 import useDebounce from '../../hooks/useDebounce';
 import ProductCard from '../../components/user/ProductCard';
@@ -59,11 +60,11 @@ const ProductListing = () => {
     let mounted = true;
     Promise.all([
       categoryApi.list().catch(() => ({ data: { categories: [] } })),
-      storeApi.getBrands().catch(() => ({ data: { brands: [] } }))
+      productApi.getBrands().catch(() => ({ data: { brands: [] } }))
     ]).then(([catRes, brandRes]) => {
       if (mounted) {
-        setCategories(catRes?.data?.categories || []);
-        setBrands(brandRes?.data?.brands || []);
+        setCategories(catRes?.data?.categories || catRes?.categories || []);
+        setBrands(brandRes?.data?.brands || brandRes?.brands || []);
       }
     });
     return () => {

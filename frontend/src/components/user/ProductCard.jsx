@@ -41,6 +41,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="card card--hoverable modern-product-card">
       <button
+        type="button"
         className="modern-product-card__wishlist"
         onClick={(e) => {
           e.preventDefault();
@@ -117,6 +118,7 @@ const ProductCard = ({ product }) => {
             </div>
 
             <button
+              type="button"
               className={`btn btn--sm modern-product-card__add-btn ${
                 added ? 'modern-product-card__add-btn--added' : ''
               }`}

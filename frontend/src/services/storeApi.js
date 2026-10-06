@@ -71,18 +71,7 @@ export const storeApi = {
    * Get Active Brands
    */
   getBrands: async () => {
-    try {
-      return await api.get('/store/brands');
-    } catch (err) {
-      if (err.statusCode === 404) {
-        try {
-          return await api.get('/products/brands');
-        } catch {
-          return { success: true, data: { brands: [] } };
-        }
-      }
-      return { success: true, data: { brands: [] } };
-    }
+    return await api.get('/products/brands');
   }
 };
 

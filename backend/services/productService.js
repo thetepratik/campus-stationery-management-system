@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const ApiError = require('../utils/ApiError');
@@ -92,18 +93,15 @@ const listProducts = async (query) => {
 };
 
 const getProductById = async (id) => {
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    throw new ApiError(404, "Product not found");
+  }
+
   const product = await Product.findById(id).populate("category", "name slug");
-
-  // console.log("========== BEFORE ==========");
-  // console.dir(product.images, { depth: null });
-
-  const serialized = serializeDocument(product);
-
-  // console.log("========== AFTER ==========");
-  // console.dir(serialized.images, { depth: null });
 
   if (!product) throw new ApiError(404, "Product not found");
 
+  const serialized = serializeDocument(product);
   return serialized;
 };
 
@@ -324,12 +322,14 @@ const bulkPriceUpdate = async (productIds, mode, value) => {
 };
 
 const getAllBrands = async () => {
-  const brands = await Product.distinct('brand');
-  return brands
-    .filter((b) => b && typeof b === 'string' && b.trim().length > 0)
-    .map((b) => b.trim())
-    .filter((val, idx, self) => self.indexOf(val) === idx)
-    .sort((a, b) => a.localeCompare(b));
+  const rawBrands = await Product.distinct('brand');
+  return Array.from(
+    new Set(
+      rawBrands
+        .filter((b) => b && typeof b === 'string' && b.trim().length > 0)
+        .map((b) => b.trim())
+    )
+  ).sort((a, b) => a.localeCompare(b));
 };
 
 module.exports = {

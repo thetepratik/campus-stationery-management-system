@@ -20,7 +20,12 @@ const getProduct = asyncHandler(async (req, res) => {
 
 const getBrands = asyncHandler(async (req, res) => {
   const brands = await storeService.getStoreBrands();
-  success(res, 200, 'Brands fetched', { brands });
+  res.status(200).json({
+    success: true,
+    message: 'Brands fetched',
+    data: { brands },
+    brands,
+  });
 });
 
 module.exports = { getHome, listProducts, getProduct, getBrands };

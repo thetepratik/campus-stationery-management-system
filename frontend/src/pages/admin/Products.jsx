@@ -60,7 +60,7 @@ const Products = () => {
   const fetchBrands = useCallback(async () => {
     try {
       const res = await productApi.getBrands();
-      setBrands(res.data.brands || []);
+      setBrands(res?.data?.brands || res?.brands || []);
     } catch {
       // Ignore brand fetch error
     }
