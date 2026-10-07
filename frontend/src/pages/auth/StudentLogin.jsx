@@ -66,7 +66,7 @@ const StudentLogin = () => {
         </div>
 
         <Button type="submit" fullWidth loading={submitting}>
-          Login
+          {submitting ? 'Signing in...' : 'Login'}
         </Button>
       </form>
 

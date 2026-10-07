@@ -58,13 +58,23 @@ api.interceptors.response.use(
       } catch {
         message = error.response.statusText || message;
       }
+    } else if (error.response?.data?.message) {
+      // Explicit message returned from backend (e.g. "Invalid email or password")
+      message = error.response.data.message;
+    } else if (error.response?.data?.errors && error.response.data.errors[0]) {
+      message = error.response.data.errors[0];
+    } else if (
+      error.code === 'ERR_NETWORK' ||
+      error.message === 'Network Error' ||
+      !error.response
+    ) {
+      // Network unreachable / Render cold-start / connection refused
+      message = "Unable to connect to server. Please try again.";
+    } else if (error.response?.status >= 500) {
+      // 5xx Internal Server Error
+      message = "Server error. Please try again later.";
     } else {
-      message =
-        error.response?.data?.message ||
-        (error.response?.data?.errors &&
-          error.response.data.errors[0]) ||
-        error.message ||
-        message;
+      message = error.message || message;
     }
 
     return Promise.reject({

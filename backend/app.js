@@ -1,3 +1,5 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -39,40 +41,18 @@ app.use(
 
 /*
 |--------------------------------------------------------------------------
-| CORS
+| CORS (Cross-Origin Resource Sharing)
 |--------------------------------------------------------------------------
 |
-| Production Vercel frontend:
-| https://campus-stationery-management-system.vercel.app
-|
-| Local frontend:
-| http://localhost:5173
+| Handles production Vercel frontend, project preview deployments,
+| environment-defined origins (CLIENT_URL, CLIENT_URLS), and preflight OPTIONS.
 |
 */
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'https://campus-stationery-management-system.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-].filter(Boolean).map((url) => url.replace(/\/$/, ''));
+const { corsOptions } = require('./config/cors');
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
-      if (!origin) return callback(null, true);
-      const cleanOrigin = origin.replace(/\/$/, '');
-      if (allowedOrigins.includes(cleanOrigin)) {
-        return callback(null, true);
-      }
-      return callback(null, false);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-role', 'x-role'],
-  })
-);
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 /*
 |--------------------------------------------------------------------------

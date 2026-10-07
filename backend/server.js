@@ -6,26 +6,19 @@ const app = require('./app');
 const connectDB = require('./config/db');
 const initSocket = require('./sockets/socketHandler');
 
-const PORT = process.env.PORT || 5000;
+const { isOriginAllowed } = require('./config/cors');
 
-const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'https://campus-stationery-management-system.vercel.app',
-  'http://localhost:5173',
-  'http://localhost:3000',
-].filter(Boolean).map((url) => url.replace(/\/$/, ''));
+const PORT = process.env.PORT || 5000;
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      const cleanOrigin = origin.replace(/\/$/, '');
-      if (allowedOrigins.includes(cleanOrigin)) {
+      if (isOriginAllowed(origin)) {
         return callback(null, true);
       }
-      return callback(null, false);
+      return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
   },

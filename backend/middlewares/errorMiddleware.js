@@ -55,6 +55,12 @@ const errorHandler = (err, req, res, next) => {
     message = 'Session expired, please log in again';
   }
 
+  // CORS error handling
+  if (err.message === 'Not allowed by CORS' || (err.message && err.message.includes('CORS'))) {
+    statusCode = 403;
+    message = 'Origin not allowed by CORS policy';
+  }
+
   if (process.env.NODE_ENV !== 'production') {
     console.error(`[Error] ${req.method} ${req.originalUrl} →`, err.stack);
   }
