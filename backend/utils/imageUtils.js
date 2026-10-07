@@ -135,22 +135,31 @@ const toBase64DataUrl = (value) => {
 /**
  * Serialize a single image.
  */
-const serializeImage = (value) => {
+const serializeImage = (value, ownerId = '', index = 0, isCategory = false) => {
   if (!value) {
     return '';
   }
 
-  /* Already serialized */
+  /* Already a URL or Base64 string */
   if (typeof value === 'string') {
     return value;
   }
 
-  /* Mongoose subdocument */
+  if (value.url && typeof value.url === 'string') {
+    return value.url;
+  }
+
+  /* If we have an ownerId, return the dedicated image streaming URL */
+  if (ownerId) {
+    if (isCategory) {
+      return `/api/categories/${ownerId}/image`;
+    }
+    return `/api/products/${ownerId}/images/${index}`;
+  }
+
+  /* Fallback: Mongoose subdocument / Buffer to Base64 (only if no owner ID available) */
   const plain =
-    value &&
-    typeof value.toObject === 'function'
-      ? value.toObject()
-      : value;
+    value && typeof value.toObject === 'function' ? value.toObject() : value;
 
   return toBase64DataUrl(plain);
 };
@@ -158,26 +167,21 @@ const serializeImage = (value) => {
 
 /**
  * Serialize multiple images.
- *
- * IMPORTANT:
- * This function was missing in your previous
- * imageUtils.js and caused:
- *
- * TypeError: serializeImages is not a function
  */
-const serializeImages = (images = []) => {
+const serializeImages = (images = [], ownerId = '') => {
   if (!Array.isArray(images)) {
     return [];
   }
 
   return images
-    .map((image) => serializeImage(image))
+    .map((image, index) => serializeImage(image, ownerId, index, false))
     .filter(Boolean);
 };
 
 
 /**
- * Serialize a MongoDB/Mongoose document.
+ * Serialize a MongoDB/Mongoose document into a lightweight representation
+ * with dedicated streaming image URLs instead of huge Base64 strings.
  */
 const serializeDocument = (doc) => {
   if (!doc) {
@@ -189,23 +193,18 @@ const serializeDocument = (doc) => {
       ? doc.toObject()
       : { ...doc };
 
+  const ownerId = plain._id ? plain._id.toString() : '';
+
   /* Product gallery */
   if (Array.isArray(plain.images)) {
-    plain.images = serializeImages(
-      plain.images
-    );
-  } else {
+    plain.images = serializeImages(plain.images, ownerId);
+  } else if (plain.images !== undefined) {
     plain.images = [];
   }
 
-  /* Single image */
-  if (
-    plain.image !== undefined &&
-    plain.image !== null
-  ) {
-    plain.image = serializeImage(
-      plain.image
-    );
+  /* Single image (e.g. Category) */
+  if (plain.image !== undefined && plain.image !== null) {
+    plain.image = serializeImage(plain.image, ownerId, 0, true);
   }
 
   return plain;
@@ -215,17 +214,12 @@ const serializeDocument = (doc) => {
 /**
  * Serialize an array of products.
  */
-const serializeProducts = (
-  products = []
-) => {
+const serializeProducts = (products = []) => {
   if (!Array.isArray(products)) {
     return [];
   }
 
-  return products.map(
-    (product) =>
-      serializeDocument(product)
-  );
+  return products.map((product) => serializeDocument(product));
 };
 
 

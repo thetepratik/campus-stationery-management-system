@@ -198,6 +198,12 @@ productSchema.index({
   status: 1,
 });
 
+productSchema.index({ brand: 1 });
+productSchema.index({ status: 1, createdAt: -1 });
+productSchema.index({ status: 1, soldCount: -1 });
+productSchema.index({ status: 1, brand: 1 });
+productSchema.index({ category: 1, status: 1, createdAt: -1 });
+
 productSchema.index({
   name: "text",
   brand: "text",

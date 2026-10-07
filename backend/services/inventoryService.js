@@ -121,7 +121,7 @@ const getStockLevels = async (query) => {
   const [items, totalCount] = await Promise.all([
     Product.find(filter)
       .populate('category', 'name')
-      .select('name sku images category currentStock minStock maxStock purchasePrice sellingPrice status')
+      .select('-images.data')
       .sort(sort)
       .skip(skip)
       .limit(limit)
@@ -129,7 +129,7 @@ const getStockLevels = async (query) => {
     Product.countDocuments(filter),
   ]);
 
-  return { items, meta: buildMeta(totalCount) };
+  return { items: items.map((p) => serializeDocument(p)), meta: buildMeta(totalCount) };
 };
 
 /**

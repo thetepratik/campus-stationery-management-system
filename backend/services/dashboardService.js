@@ -203,7 +203,8 @@ const getTopSellingProducts = async (limit = 5) => {
   const products = await Product.find({ status: 'active' })
     .sort({ soldCount: -1 })
     .limit(limit)
-    .select('name soldCount sellingPrice images currentStock');
+    .select('-images.data')
+    .lean();
   return products.map((p) => serializeDocument(p));
 };
 
@@ -211,7 +212,7 @@ const getLeastSellingProducts = async (limit = 5) => {
   return Product.find({ status: 'active' })
     .sort({ soldCount: 1 })
     .limit(limit)
-    .select('name soldCount sellingPrice images currentStock')
+    .select('-images.data')
     .lean();
 };
 
@@ -219,7 +220,8 @@ const getLowStockAlerts = async (limit = 10) => {
   const products = await Product.find({ $expr: { $and: [{ $gt: ['$currentStock', 0] }, { $lte: ['$currentStock', '$minStock'] }] } })
     .sort({ currentStock: 1 })
     .limit(limit)
-    .select('name currentStock minStock images');
+    .select('-images.data')
+    .lean();
   return products.map((p) => serializeDocument(p));
 };
 
@@ -227,7 +229,8 @@ const getOutOfStockAlerts = async (limit = 10) => {
   const products = await Product.find({ currentStock: { $lte: 0 } })
     .sort({ updatedAt: -1 })
     .limit(limit)
-    .select('name currentStock images');
+    .select('-images.data')
+    .lean();
   return products.map((p) => serializeDocument(p));
 };
 

@@ -5,17 +5,29 @@ const { slugify } = require('../utils/generateId');
 const { serializeDocument } = require('../utils/imageUtils');
 
 const listCategories = async () => {
-  const categories = await Category.find({}).sort({ createdAt: -1 }).lean();
-  const counts = await Product.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }]);
+  const [categories, counts] = await Promise.all([
+    Category.find({}).select('-image.data').sort({ createdAt: -1 }).lean(),
+    Product.aggregate([{ $group: { _id: '$category', count: { $sum: 1 } } }]),
+  ]);
   const countMap = new Map(counts.map((c) => [c._id.toString(), c.count]));
 
-  return categories.map((c) => ({ ...serializeDocument(c), productCount: countMap.get(c._id.toString()) || 0 }));
+  return categories.map((c) => ({
+    ...serializeDocument(c),
+    productCount: countMap.get(c._id.toString()) || 0,
+  }));
 };
 
 const getCategoryById = async (id) => {
-  const category = await Category.findById(id);
+  const category = await Category.findById(id).select('-image.data').lean();
   if (!category) throw new ApiError(404, 'Category not found');
   return serializeDocument(category);
+};
+
+const getCategoryImage = async (id) => {
+  if (!id) return null;
+  const category = await Category.findById(id).select('image').lean();
+  if (!category || !category.image) return null;
+  return category.image;
 };
 
 const createCategory = async ({ name, description }, file) => {
@@ -77,4 +89,4 @@ const deleteCategory = async (id) => {
   return serializeDocument(category);
 };
 
-module.exports = { listCategories, getCategoryById, createCategory, updateCategory, deleteCategory };
+module.exports = { listCategories, getCategoryById, getCategoryImage, createCategory, updateCategory, deleteCategory };

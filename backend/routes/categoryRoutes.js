@@ -10,6 +10,7 @@ const { categoryCreateValidation, categoryUpdateValidation } = require('../valid
 
 // Public read (student storefront needs categories too — Phase 7)
 router.get('/', categoryController.listCategories);
+router.get('/:id/image', categoryController.getCategoryImage);
 router.get('/:id', categoryController.getCategory);
 
 // Admin-only writes

@@ -16,12 +16,14 @@ const authLimiter = rateLimit({
 
 /**
  * General API limiter, applied globally in app.js.
+ * Skips health check endpoint so uptime checks and load checks do not exhaust limits.
  */
 const apiLimiter = rateLimit({
   windowMs: windowMin * 60 * 1000,
-  max: Number(process.env.RATE_LIMIT_MAX) || 100,
+  max: Number(process.env.RATE_LIMIT_MAX) || 1000,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path === '/health' || req.originalUrl?.includes('/health'),
   message: { success: false, message: 'Too many requests. Please slow down.', errors: [] },
 });
 

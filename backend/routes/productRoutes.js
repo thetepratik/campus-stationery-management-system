@@ -44,6 +44,7 @@ router.post(
 );
 
 router.get('/brands', productController.getBrands);
+router.get('/:id/images/:imageIndex', productController.getProductImage);
 router.get('/:id', productController.getProduct);
 
 router.post(

@@ -486,14 +486,14 @@ const getSalesReportData = async (query = {}) => {
   // Build combined transactions
   const [offlineDocs, onlineDocs] = await Promise.all([
     Sale.find(offlineMatch)
-      .populate('items.product', 'name sku images category')
+      .populate('items.product', 'name sku images.contentType images.fileName category')
       .populate('soldBy', 'name')
       .lean(),
     Order.find(onlineMatch)
       .populate('student', 'name rollNumber department email mobile')
       .populate({
         path: 'items',
-        populate: { path: 'product', select: 'name sku images category' },
+        populate: { path: 'product', select: 'name sku images.contentType images.fileName category' },
       })
       .lean(),
   ]);

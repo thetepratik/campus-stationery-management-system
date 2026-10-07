@@ -13,7 +13,7 @@ const getWishlist = async (studentId) => {
   const wishlist = await Wishlist.findOne({ student: studentId }).populate({
     path: 'products',
     match: { status: 'active' },
-    select: 'name slug images sellingPrice discountPercent currentStock ratingAverage ratingCount',
+    select: 'name slug images.contentType images.fileName sellingPrice discountPercent currentStock ratingAverage ratingCount',
   });
   const products = wishlist?.products || [];
   return serializeProducts(products);

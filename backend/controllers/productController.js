@@ -4,13 +4,54 @@ const productService = require('../services/productService');
 const { notifyAdmin } = require('../services/notificationService');
 
 const listProducts = asyncHandler(async (req, res) => {
-  const { items, meta } = await productService.listProducts(req.query);
-  success(res, 200, 'Products fetched', { products: items }, meta);
+  const start = performance.now();
+  const { items, meta, timings } = await productService.listProducts(req.query);
+  const pagination = {
+    page: meta.page,
+    limit: meta.limit,
+    total: meta.totalCount,
+    pages: meta.totalPages,
+  };
+  const totalDuration = Math.round(performance.now() - start);
+  console.log(
+    `[PERF] GET /api/products ${totalDuration}ms (db: ${timings?.dbDuration || 0}ms, count: ${items.length})`
+  );
+
+  res.status(200).json({
+    success: true,
+    message: 'Products fetched',
+    data: {
+      products: items,
+      pagination,
+    },
+    pagination,
+    meta,
+  });
 });
 
 const getProduct = asyncHandler(async (req, res) => {
   const product = await productService.getProductById(req.params.id);
   success(res, 200, 'Product fetched', { product });
+});
+
+const getProductImage = asyncHandler(async (req, res) => {
+  const { id, imageIndex } = req.params;
+  const index = parseInt(imageIndex, 10);
+  if (isNaN(index) || index < 0) {
+    return res.status(400).json({ success: false, message: 'Invalid image index' });
+  }
+
+  const image = await productService.getProductImage(id, index);
+  if (!image || !image.data) {
+    return res.status(404).json({ success: false, message: 'Image not found' });
+  }
+
+  res.set('Content-Type', image.contentType || 'image/jpeg');
+  res.set('Cache-Control', 'public, max-age=86400, immutable');
+  const buffer = Buffer.isBuffer(image.data)
+    ? image.data
+    : Buffer.from(image.data.buffer || image.data);
+  return res.send(buffer);
 });
 
 const createProduct = asyncHandler(async (req, res) => {
@@ -73,6 +114,7 @@ const getBrands = asyncHandler(async (req, res) => {
 module.exports = {
   listProducts,
   getProduct,
+  getProductImage,
   createProduct,
   updateProduct,
   deleteProduct,

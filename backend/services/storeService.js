@@ -11,22 +11,33 @@ const { serializeProducts, serializeDocument } = require('../utils/imageUtils');
 const getHomeData = async () => {
   const [featured, trending, recentlyAdded, offers, categories] = await Promise.all([
     Product.find({ status: 'active', isFeatured: true })
+      .select('-images.data')
       .populate('category', 'name slug')
       .sort({ createdAt: -1 })
-      .limit(8),
+      .limit(8)
+      .lean(),
     Product.find({ status: 'active' })
+      .select('-images.data')
       .populate('category', 'name slug')
       .sort({ soldCount: -1 })
-      .limit(8),
+      .limit(8)
+      .lean(),
     Product.find({ status: 'active' })
+      .select('-images.data')
       .populate('category', 'name slug')
       .sort({ createdAt: -1 })
-      .limit(8),
+      .limit(8)
+      .lean(),
     Product.find({ status: 'active', discountPercent: { $gt: 0 } })
+      .select('-images.data')
       .populate('category', 'name slug')
       .sort({ discountPercent: -1 })
-      .limit(8),
-    Category.find({ isActive: true }).sort({ name: 1 }),
+      .limit(8)
+      .lean(),
+    Category.find({ isActive: true })
+      .select('-image.data')
+      .sort({ name: 1 })
+      .lean(),
   ]);
 
   return {
@@ -68,6 +79,7 @@ const getStoreProductById = async (id) => {
  */
 const getRelatedProducts = async (productId, categoryId, limit = 4) => {
   const related = await Product.find({ status: 'active', category: categoryId, _id: { $ne: productId } })
+    .select('-images.data')
     .sort({ soldCount: -1 })
     .limit(limit)
     .lean();

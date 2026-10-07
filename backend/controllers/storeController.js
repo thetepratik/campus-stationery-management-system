@@ -9,7 +9,22 @@ const getHome = asyncHandler(async (req, res) => {
 
 const listProducts = asyncHandler(async (req, res) => {
   const { items, meta } = await storeService.getStoreProducts(req.query);
-  success(res, 200, 'Products fetched', { products: items }, meta);
+  const pagination = {
+    page: meta.page,
+    limit: meta.limit,
+    total: meta.totalCount,
+    pages: meta.totalPages,
+  };
+  res.status(200).json({
+    success: true,
+    message: 'Products fetched',
+    data: {
+      products: items,
+      pagination,
+    },
+    pagination,
+    meta,
+  });
 });
 
 const getProduct = asyncHandler(async (req, res) => {

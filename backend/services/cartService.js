@@ -23,7 +23,7 @@ const getCartSummary = async (studentId) => {
 
   const populated = await Cart.findById(cart._id).populate({
     path: 'items.product',
-    select: 'name images sellingPrice discountPercent gstPercent currentStock minStock status',
+    select: 'name images.contentType images.fileName sellingPrice discountPercent gstPercent currentStock minStock status',
   });
 
   // Drop line items whose product was deleted or deactivated since being added.

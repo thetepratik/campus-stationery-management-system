@@ -12,6 +12,21 @@ const getCategory = asyncHandler(async (req, res) => {
   success(res, 200, 'Category fetched', { category });
 });
 
+const getCategoryImage = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const image = await categoryService.getCategoryImage(id);
+  if (!image || !image.data) {
+    return res.status(404).json({ success: false, message: 'Image not found' });
+  }
+
+  res.set('Content-Type', image.contentType || 'image/jpeg');
+  res.set('Cache-Control', 'public, max-age=86400, immutable');
+  const buffer = Buffer.isBuffer(image.data)
+    ? image.data
+    : Buffer.from(image.data.buffer || image.data);
+  return res.send(buffer);
+});
+
 const createCategory = asyncHandler(async (req, res) => {
   const category = await categoryService.createCategory(req.body, req.file);
   success(res, 201, 'Category created successfully', { category });
@@ -27,4 +42,4 @@ const deleteCategory = asyncHandler(async (req, res) => {
   success(res, 200, 'Category deleted successfully');
 });
 
-module.exports = { listCategories, getCategory, createCategory, updateCategory, deleteCategory };
+module.exports = { listCategories, getCategory, getCategoryImage, createCategory, updateCategory, deleteCategory };

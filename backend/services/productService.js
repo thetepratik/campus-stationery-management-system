@@ -19,6 +19,8 @@ const ALLOWED_SORT_FIELDS = {
   'sold-desc': { soldCount: -1 },
 };
 
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 /**
  * Builds the Mongo filter object from query params: search, category, brand,
  * minPrice, maxPrice, status, availability (in-stock/low-stock/out-of-stock).
@@ -27,7 +29,7 @@ const buildFilter = (query) => {
   const filter = {};
 
   if (query.search && query.search.trim()) {
-    const term = query.search.trim();
+    const term = escapeRegex(query.search.trim());
     filter.$or = [
       { name: { $regex: term, $options: 'i' } },
       { brand: { $regex: term, $options: 'i' } },
@@ -70,25 +72,30 @@ const buildFilter = (query) => {
 };
 
 const listProducts = async (query) => {
-  const { skip, limit, buildMeta } = getPagination(query, 20, 100);
+  const { skip, limit, buildMeta } = getPagination(query, 20, 50);
   const filter = buildFilter(query);
   const sort = ALLOWED_SORT_FIELDS[query.sort] || ALLOWED_SORT_FIELDS.newest;
 
+  const dbStart = performance.now();
   const [products, totalCount] = await Promise.all([
     Product.find(filter)
+      .select('-images.data')
       .populate("category", "name slug")
       .sort(sort)
       .skip(skip)
-      .limit(limit),
+      .limit(limit)
+      .lean(),
 
     Product.countDocuments(filter),
   ]);
+  const dbDuration = Math.round(performance.now() - dbStart);
 
   const items = products.map((product) => serializeDocument(product));
 
   return {
     items,
     meta: buildMeta(totalCount),
+    timings: { dbDuration },
   };
 };
 
@@ -97,12 +104,34 @@ const getProductById = async (id) => {
     throw new ApiError(404, "Product not found");
   }
 
-  const product = await Product.findById(id).populate("category", "name slug");
+  const product = await Product.findById(id)
+    .select('-images.data')
+    .populate("category", "name slug")
+    .lean();
 
   if (!product) throw new ApiError(404, "Product not found");
 
   const serialized = serializeDocument(product);
   return serialized;
+};
+
+/**
+ * Fetch a single image buffer from MongoDB on demand.
+ * Uses projection slice to avoid loading all images of the product.
+ */
+const getProductImage = async (id, index) => {
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    return null;
+  }
+  const numericIndex = Math.max(0, parseInt(index, 10) || 0);
+  const product = await Product.findById(id, {
+    images: { $slice: [numericIndex, 1] },
+  }).lean();
+
+  if (!product || !product.images || !product.images[0]) {
+    return null;
+  }
+  return product.images[0];
 };
 
 const validateCategory = async (categoryId) => {
@@ -335,6 +364,7 @@ const getAllBrands = async () => {
 module.exports = {
   listProducts,
   getProductById,
+  getProductImage,
   createProduct,
   updateProduct,
   deleteProduct,

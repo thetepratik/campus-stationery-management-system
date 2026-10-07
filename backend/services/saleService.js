@@ -121,7 +121,7 @@ const getSaleById = async (id) => {
   const sale = await Sale.findOne(query)
     .populate('soldBy', 'name')
     .populate('reversedBy', 'name')
-    .populate('items.product', 'name sku images');
+    .populate('items.product', 'name sku images.contentType images.fileName');
   if (!sale) throw new ApiError(404, 'Sale not found');
 
   const plainSale = sale.toObject();
