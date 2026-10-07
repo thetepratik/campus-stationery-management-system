@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import { FiCheckCircle, FiClock, FiMapPin, FiDownload } from "react-icons/fi";
+import { FiCheckCircle, FiClock, FiMapPin, FiDownload, FiImage } from "react-icons/fi";
 
 import { orderApi } from "../../services/orderApi";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { formatDateTime } from "../../utils/formatDate";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -102,8 +103,14 @@ const OrderConfirmation = () => {
             >
               {item.image ? (
                 <img
-                  src={item.image}
-                  alt=""
+                  src={getImageUrl(item.image, item.product?._id || item.product, 0)}
+                  alt={item.name}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.style.display = 'none';
+                    if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
                   style={{
                     width: 44,
                     height: 44,
@@ -112,6 +119,21 @@ const OrderConfirmation = () => {
                   }}
                 />
               ) : null}
+              <div
+                style={{
+                  display: item.image ? 'none' : 'flex',
+                  width: 44,
+                  height: 44,
+                  borderRadius: 8,
+                  background: 'var(--color-bg)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--color-border)',
+                  flexShrink: 0,
+                }}
+              >
+                <FiImage color="var(--color-text-muted)" size={18} />
+              </div>
               <div style={{ flex: 1 }}>
                 <div>
                   {item.name} × {item.quantity}

@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
-import { FiSearch, FiPlus } from 'react-icons/fi';
+import { FiSearch, FiPlus, FiImage } from 'react-icons/fi';
 import Skeleton from 'react-loading-skeleton';
 import { productApi } from '../../../services/productApi';
 import useDebounce from '../../../hooks/useDebounce';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const ProductSearchPanel = ({ onAdd, cartQuantities }) => {
   const [search, setSearch] = useState('');
@@ -68,10 +69,32 @@ const ProductSearchPanel = ({ onAdd, cartQuantities }) => {
               >
                 <div className="flex items-center gap-3">
                   {p.images?.[0] ? (
-                    <img src={p.images[0]} alt="" style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }} />
-                  ) : (
-                    <div style={{ width: 40, height: 40, borderRadius: 6, background: 'var(--color-bg)' }} />
-                  )}
+                    <img
+                      src={getImageUrl(p.images[0], p._id, 0)}
+                      alt={p.name}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.style.display = 'none';
+                        if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }}
+                      style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }}
+                    />
+                  ) : null}
+                  <div
+                    style={{
+                      display: p.images?.[0] ? 'none' : 'flex',
+                      width: 40,
+                      height: 40,
+                      borderRadius: 6,
+                      background: 'var(--color-bg)',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid var(--color-border)',
+                    }}
+                  >
+                    <FiImage color="var(--color-text-muted)" size={16} />
+                  </div>
                   <div>
                     <div style={{ fontWeight: 500, fontSize: 'var(--font-size-sm)' }}>{p.name}</div>
                     <div className="flex items-center gap-2" style={{ marginTop: 2 }}>

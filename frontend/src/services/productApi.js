@@ -23,9 +23,9 @@ export const productApi = {
   list: (params) => api.get(`/products?${buildQueryString(params)}`),
   get: (id) => api.get(`/products/${id}`),
   create: (data, files) =>
-    api.post('/products', toFormData(data, files), { headers: { 'Content-Type': 'multipart/form-data' } }),
+    api.post('/products', toFormData(data, files)),
   update: (id, data, files) =>
-    api.put(`/products/${id}`, toFormData(data, files), { headers: { 'Content-Type': 'multipart/form-data' } }),
+    api.put(`/products/${id}`, toFormData(data, files)),
   remove: (id) => api.delete(`/products/${id}`),
   bulkDelete: (productIds) => api.post('/products/bulk-delete', { productIds }),
   bulkUpdateStatus: (productIds, status) => api.post('/products/bulk-status', { productIds, status }),

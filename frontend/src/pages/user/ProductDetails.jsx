@@ -21,6 +21,7 @@ import ProductCard from "../../components/user/ProductCard";
 import ReviewList from "../../components/user/ReviewList";
 import ReviewForm from "../../components/user/ReviewForm";
 import Button from "../../components/common/Button";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -147,22 +148,33 @@ const ProductDetails = () => {
           <div className="product-gallery-main">
             {product.images?.[activeImage] ? (
               <img
-                src={product.images[activeImage]}
+                src={getImageUrl(product.images[activeImage], product._id, activeImage)}
                 alt={product.name}
+                loading="lazy"
+                decoding="async"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.style.display = 'none';
+                  const fallback = e.currentTarget.nextElementSibling;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
                 }}
               />
-            ) : (
-              <div
-                className="flex items-center justify-center"
-                style={{ height: "100%", color: "var(--color-text-muted)" }}
-              >
-                No image available
-              </div>
-            )}
+            ) : null}
+            <div
+              className="flex items-center justify-center"
+              style={{
+                display: product.images?.[activeImage] ? 'none' : 'flex',
+                height: "100%",
+                color: "var(--color-text-muted)",
+              }}
+            >
+              No image available
+            </div>
           </div>
           {product.images?.length > 1 && (
             <div className="product-gallery-thumbs">
@@ -173,8 +185,10 @@ const ProductDetails = () => {
                   onClick={() => setActiveImage(i)}
                 >
                   <img
-                    src={img}
+                    src={getImageUrl(img, product._id, i)}
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     style={{
                       width: "100%",
                       height: "100%",

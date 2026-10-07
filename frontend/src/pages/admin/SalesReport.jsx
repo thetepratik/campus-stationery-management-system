@@ -39,6 +39,7 @@ import { Line, Doughnut } from 'react-chartjs-2';
 
 import { reportApi } from '../../services/reportApi';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { getImageUrl } from '../../utils/imageUrl';
 import { useAuth } from '../../context/AuthContext';
 import StatCard from '../../components/admin/dashboard/StatCard';
 import Pagination from '../../components/common/Pagination';
@@ -870,26 +871,31 @@ const SalesReport = () => {
                           <div className="flex items-center gap-2">
                             {p.image ? (
                               <img
-                                src={p.image}
+                                src={getImageUrl(p.image, p.productId, 0)}
                                 alt={p.name}
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.style.display = 'none';
+                                  if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                                }}
                                 style={{ width: 28, height: 28, borderRadius: 'var(--radius-sm)', objectFit: 'cover' }}
                               />
-                            ) : (
-                              <div
-                                style={{
-                                  width: 28,
-                                  height: 28,
-                                  borderRadius: 'var(--radius-sm)',
-                                  background: 'var(--color-bg)',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  color: 'var(--color-text-muted)',
-                                }}
-                              >
-                                <FiBox size={14} />
-                              </div>
-                            )}
+                            ) : null}
+                            <div
+                              style={{
+                                display: p.image ? 'none' : 'flex',
+                                width: 28,
+                                height: 28,
+                                borderRadius: 'var(--radius-sm)',
+                                background: 'var(--color-bg)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--color-text-muted)',
+                              }}
+                            >
+                              <FiBox size={14} />
+                            </div>
                             <span style={{ fontWeight: 500 }}>{p.name}</span>
                           </div>
                         </td>
@@ -958,26 +964,31 @@ const SalesReport = () => {
                           <div className="flex items-center gap-2">
                             {p.image ? (
                               <img
-                                src={p.image}
+                                src={getImageUrl(p.image, p.productId, 0)}
                                 alt={p.name}
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.style.display = 'none';
+                                  if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                                }}
                                 style={{ width: 28, height: 28, borderRadius: 'var(--radius-sm)', objectFit: 'cover' }}
                               />
-                            ) : (
-                              <div
-                                style={{
-                                  width: 28,
-                                  height: 28,
-                                  borderRadius: 'var(--radius-sm)',
-                                  background: 'var(--color-bg)',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  color: 'var(--color-text-muted)',
-                                }}
-                              >
-                                <FiBox size={14} />
-                              </div>
-                            )}
+                            ) : null}
+                            <div
+                              style={{
+                                display: p.image ? 'none' : 'flex',
+                                width: 28,
+                                height: 28,
+                                borderRadius: 'var(--radius-sm)',
+                                background: 'var(--color-bg)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--color-text-muted)',
+                              }}
+                            >
+                              <FiBox size={14} />
+                            </div>
                             <span style={{ fontWeight: 500 }}>{p.name}</span>
                           </div>
                         </td>

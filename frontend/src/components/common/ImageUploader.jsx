@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { FiUploadCloud, FiX } from "react-icons/fi";
+import { getImageUrl } from "../../utils/imageUrl";
 
 /**
  * multiple=false -> single image mode (categories); returns/accepts a single File
@@ -81,7 +82,7 @@ const ImageUploader = ({
               style={{ position: "relative", width: 72, height: 72 }}
             >
               <img
-                src={url}
+                src={getImageUrl(url)}
                 alt=""
                 style={{
                   width: "100%",
@@ -114,48 +115,64 @@ const ImageUploader = ({
               )}
             </div>
           ))}
-          {previewFiles.map((file, i) => (
-            <div
-              key={`new-${i}`}
-              style={{ position: "relative", width: 72, height: 72 }}
-            >
+          {previewFiles.map((file, i) => {
+            const previewSrc = file instanceof Blob ? URL.createObjectURL(file) : null;
+            return (
               <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: "var(--color-bg)",
-                  color: "var(--color-text-muted)",
-                  borderRadius: "var(--radius-sm)",
-                  fontSize: "var(--font-size-xs)",
-                }}
+                key={`new-${i}`}
+                style={{ position: "relative", width: 72, height: 72 }}
               >
-                New image
+                {previewSrc ? (
+                  <img
+                    src={previewSrc}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "var(--radius-sm)",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "var(--color-bg)",
+                      color: "var(--color-text-muted)",
+                      borderRadius: "var(--radius-sm)",
+                      fontSize: "var(--font-size-xs)",
+                    }}
+                  >
+                    New image
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => (multiple ? removeNewFile(i) : onChange(null))}
+                  style={{
+                    position: "absolute",
+                    top: -6,
+                    right: -6,
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    background: "var(--color-danger)",
+                    color: "#fff",
+                    border: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <FiX size={12} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => (multiple ? removeNewFile(i) : onChange(null))}
-                style={{
-                  position: "absolute",
-                  top: -6,
-                  right: -6,
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  background: "var(--color-danger)",
-                  color: "#fff",
-                  border: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FiX size={12} />
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

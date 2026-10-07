@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Skeleton from "react-loading-skeleton";
-import { FiPackage, FiChevronDown, FiChevronUp, FiDownload } from "react-icons/fi";
+import { FiPackage, FiChevronDown, FiChevronUp, FiDownload, FiImage } from "react-icons/fi";
 
 import { orderApi } from "../../services/orderApi";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { formatDateTime } from "../../utils/formatDate";
 import { STATUS_BADGE_MAP, STATUS_LABELS } from "../../utils/orderStatus";
+import { getImageUrl } from "../../utils/imageUrl";
 
 const TABS = [
   { value: "", label: "All" },
@@ -219,17 +220,37 @@ const MyOrders = () => {
                           >
                             {item.image ? (
                               <img
-                                src={item.image}
-                                alt=""
+                                src={getImageUrl(item.image, item.product?._id || item.product, 0)}
+                                alt={item.name}
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.style.display = 'none';
+                                  if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                                }}
                                 style={{
                                   width: 40,
                                   height: 40,
                                   borderRadius: 8,
                                   objectFit: "cover",
-                                daylight: "cover"
                                 }}
                               />
                             ) : null}
+                            <div
+                              style={{
+                                display: item.image ? 'none' : 'flex',
+                                width: 40,
+                                height: 40,
+                                borderRadius: 8,
+                                background: 'var(--color-bg)',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                border: '1px solid var(--color-border)',
+                                flexShrink: 0,
+                              }}
+                            >
+                              <FiImage color="var(--color-text-muted)" size={16} />
+                            </div>
                             <span
                               style={{
                                 flex: 1,

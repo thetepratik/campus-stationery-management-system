@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
-import { FiMinus, FiPlus, FiTrash2, FiAlertTriangle } from 'react-icons/fi';
+import { FiMinus, FiPlus, FiTrash2, FiAlertTriangle, FiImage } from 'react-icons/fi';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const CartItemRow = ({ item, onIncrement, onDecrement, onRemove }) => (
   <div
@@ -9,10 +10,32 @@ const CartItemRow = ({ item, onIncrement, onDecrement, onRemove }) => (
   >
     <Link to={`/products/${item.product._id}`} style={{ flexShrink: 0 }}>
       {item.product.images?.[0] ? (
-        <img src={item.product.images[0]} alt="" style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover' }} />
-      ) : (
-        <div style={{ width: 64, height: 64, borderRadius: 8, background: 'var(--color-bg)' }} />
-      )}
+        <img
+          src={getImageUrl(item.product.images[0], item.product._id, 0)}
+          alt={item.product.name}
+          loading="lazy"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.style.display = 'none';
+            if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+          }}
+          style={{ width: 64, height: 64, borderRadius: 8, objectFit: 'cover' }}
+        />
+      ) : null}
+      <div
+        style={{
+          display: item.product.images?.[0] ? 'none' : 'flex',
+          width: 64,
+          height: 64,
+          borderRadius: 8,
+          background: 'var(--color-bg)',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: '1px solid var(--color-border)',
+        }}
+      >
+        <FiImage color="var(--color-text-muted)" size={20} />
+      </div>
     </Link>
 
     <div style={{ flex: 1, minWidth: 0 }}>

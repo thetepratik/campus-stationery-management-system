@@ -1,5 +1,6 @@
 import { FiEdit2, FiTrash2, FiImage, FiBox, FiCheckCircle, FiAlertTriangle, FiXCircle } from 'react-icons/fi';
 import { formatCurrency } from '../../../utils/formatCurrency';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const getStockBadge = (product) => {
   if (product.currentStock <= 0) {
@@ -101,14 +102,28 @@ const ProductTable = ({
                     >
                       {p.images?.[0] ? (
                         <img
-                          src={p.images[0]}
+                          src={getImageUrl(p.images[0], p._id, 0)}
                           alt={p.name}
                           loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.style.display = 'none';
+                            if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                          }}
                           style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                         />
-                      ) : (
+                      ) : null}
+                      <div
+                        style={{
+                          display: p.images?.[0] ? 'none' : 'flex',
+                          width: '100%',
+                          height: '100%',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
                         <FiImage color="var(--color-text-muted)" size={20} />
-                      )}
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -212,15 +227,27 @@ const ProductTable = ({
                   aria-label={`Select ${p.name}`}
                 />
                 {p.images?.[0] ? (
-                  <img src={p.images[0]} alt={p.name} className="admin-product-mobile-card__img" />
-                ) : (
-                  <div
-                    className="admin-product-mobile-card__img flex items-center justify-center"
-                    style={{ background: 'var(--color-bg)' }}
-                  >
-                    <FiImage color="var(--color-text-muted)" size={18} />
-                  </div>
-                )}
+                  <img
+                    src={getImageUrl(p.images[0], p._id, 0)}
+                    alt={p.name}
+                    className="admin-product-mobile-card__img"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div
+                  className="admin-product-mobile-card__img items-center justify-center"
+                  style={{
+                    display: p.images?.[0] ? 'none' : 'flex',
+                    background: 'var(--color-bg)',
+                  }}
+                >
+                  <FiImage color="var(--color-text-muted)" size={18} />
+                </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="admin-product-table__title">{p.name}</div>
                   <div className="flex items-center gap-2" style={{ marginTop: 2, flexWrap: 'wrap' }}>

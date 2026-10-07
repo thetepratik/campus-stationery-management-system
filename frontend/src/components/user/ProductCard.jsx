@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiHeart, FiCheck } from 'react-icons/fi';
 import StarRating from './StarRating';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { useWishlist } from '../../context/WishlistContext';
 import { useCart } from '../../context/CartContext';
+import { getImageUrl } from '../../utils/imageUrl';
 
 const ProductCard = ({ product }) => {
   const { isWishlisted, toggle } = useWishlist();
@@ -65,18 +66,30 @@ const ProductCard = ({ product }) => {
 
       <Link to={`/products/${product._id}`} className="modern-product-card__link">
         <div className="modern-product-card__image-wrap">
-          {product.images?.[0] ? (
+          {product.images?.[0] || product.imageUrl ? (
             <img
-              src={product.images[0]}
+              src={getImageUrl(product.images?.[0] || product.imageUrl, product._id, 0)}
               alt={product.name}
               loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                if (import.meta.env.DEV) {
+                  console.error('Product image failed to load:', e.currentTarget.src);
+                }
+                e.currentTarget.onerror = null;
+                e.currentTarget.style.display = 'none';
+                const fallback = e.currentTarget.nextElementSibling;
+                if (fallback) fallback.style.display = 'flex';
+              }}
               className="modern-product-card__img"
             />
-          ) : (
-            <div className="modern-product-card__no-img">
-              <span>Stationery</span>
-            </div>
-          )}
+          ) : null}
+          <div
+            className="modern-product-card__no-img"
+            style={{ display: product.images?.[0] || product.imageUrl ? 'none' : 'flex' }}
+          >
+            <span>Stationery</span>
+          </div>
         </div>
 
         <div className="modern-product-card__body">
@@ -145,4 +158,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

@@ -36,7 +36,7 @@ const getProduct = asyncHandler(async (req, res) => {
 
 const getProductImage = asyncHandler(async (req, res) => {
   const { id, imageIndex } = req.params;
-  const index = parseInt(imageIndex, 10);
+  const index = imageIndex === undefined ? 0 : parseInt(imageIndex, 10);
   if (isNaN(index) || index < 0) {
     return res.status(400).json({ success: false, message: 'Invalid image index' });
   }

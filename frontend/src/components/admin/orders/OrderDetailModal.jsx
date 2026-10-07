@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { FiCheck, FiX, FiClock, FiTrash2, FiDownload } from "react-icons/fi";
+import { FiCheck, FiX, FiClock, FiTrash2, FiDownload, FiImage } from "react-icons/fi";
 import Modal from "../../common/Modal";
 import Button from "../../common/Button";
 import { formatCurrency } from "../../../utils/formatCurrency";
@@ -11,6 +11,7 @@ import {
   isTerminalStatus,
 } from "../../../utils/orderStatus";
 import { adminOrderApi } from "../../../services/adminOrderApi";
+import { getImageUrl } from "../../../utils/imageUrl";
 
 const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
   const [advancing, setAdvancing] = useState(false);
@@ -137,8 +138,14 @@ const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
             >
               {item.image ? (
                 <img
-                  src={item.image}
-                  alt=""
+                  src={getImageUrl(item.image, item.product?._id || item.product, 0)}
+                  alt={item.name}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.style.display = 'none';
+                    if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }}
                   style={{
                     width: 40,
                     height: 40,
@@ -147,6 +154,21 @@ const OrderDetailModal = ({ open, onClose, order, onUpdated, onDelete }) => {
                   }}
                 />
               ) : null}
+              <div
+                style={{
+                  display: item.image ? 'none' : 'flex',
+                  width: 40,
+                  height: 40,
+                  borderRadius: 8,
+                  background: 'var(--color-bg)',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--color-border)',
+                  flexShrink: 0,
+                }}
+              >
+                <FiImage color="var(--color-text-muted)" size={16} />
+              </div>
               <span style={{ flex: 1 }}>
                 {item.name} × {item.quantity}
               </span>

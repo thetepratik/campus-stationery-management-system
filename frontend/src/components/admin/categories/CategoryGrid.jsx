@@ -1,4 +1,5 @@
 import { FiEdit2, FiTrash2, FiImage } from 'react-icons/fi';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const CategoryGrid = ({ categories = [], onEdit, onDelete }) => {
   if (!categories.length) {
@@ -18,14 +19,39 @@ const CategoryGrid = ({ categories = [], onEdit, onDelete }) => {
           <div
             style={{
               height: 120,
-              background: cat.image ? `url(${cat.image}) center/cover` : 'var(--color-bg)',
+              position: 'relative',
+              background: 'var(--color-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: 'var(--color-text-muted)',
+              overflow: 'hidden',
             }}
           >
-            {!cat.image && <FiImage size={28} />}
+            {cat.image ? (
+              <img
+                src={getImageUrl(cat.image)}
+                alt={cat.name}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.style.display = 'none';
+                  if (e.currentTarget.nextElementSibling) e.currentTarget.nextElementSibling.style.display = 'flex';
+                }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : null}
+            <div
+              style={{
+                display: cat.image ? 'none' : 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%',
+              }}
+            >
+              <FiImage size={28} />
+            </div>
           </div>
           <div style={{ padding: 'var(--space-4)' }}>
             <div className="flex items-center justify-between">
