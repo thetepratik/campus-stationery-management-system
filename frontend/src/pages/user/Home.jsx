@@ -26,6 +26,7 @@ import useDebounce from '../../hooks/useDebounce';
 import ProductCard from '../../components/user/ProductCard';
 import FilterDrawer from '../../components/user/FilterDrawer';
 import HeroIllustration from '../../components/user/HeroIllustration';
+import { useShopSettings } from '../../context/ShopSettingsContext';
 
 const SORT_OPTIONS = [
   { value: 'relevance', label: 'Relevance' },
@@ -65,6 +66,7 @@ const HERO_SLIDES = [
 
 const Home = () => {
   const navigate = useNavigate();
+  const { settings: shopSettings } = useShopSettings();
 
   // Hero carousel state
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -545,12 +547,11 @@ const Home = () => {
           ============================================================ */}
       <section id="about-section" className="card panel" style={{ marginBottom: 'var(--space-6)' }}>
         <div className="panel__header">
-          <span className="panel__title">About CampusKart</span>
+          <span className="panel__title">About {shopSettings?.shopName || 'CampusKart'}</span>
         </div>
         <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', lineHeight: 1.8 }}>
-          CampusKart is your on-campus stationery and study supplies hub. We keep thousands of notebooks,
-          technical pens, calculators, geometry sets, and art materials in stock for your academic journey.
-          Order online via Razorpay and pick up your items at the campus store counter without standing in line.
+          {shopSettings?.description ||
+            `${shopSettings?.shopName || 'CampusKart'} is your on-campus stationery and study supplies hub. We keep thousands of notebooks, technical pens, calculators, geometry sets, and art materials in stock for your academic journey. Order online via Razorpay and pick up your items at the campus store counter without standing in line.`}
         </p>
       </section>
 
@@ -559,9 +560,9 @@ const Home = () => {
           <span className="panel__title">Contact & Campus Store Hours</span>
         </div>
         <div style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)', lineHeight: 1.8 }}>
-          <div><strong>Store Location:</strong> Ground Floor, Student Activity Center (SAC)</div>
-          <div><strong>Hours:</strong> Monday – Saturday: 8:30 AM – 6:30 PM</div>
-          <div><strong>Support Email:</strong> support@campuskart.edu | Phone: Ext. 4201</div>
+          <div><strong>Store Location:</strong> {shopSettings?.address || 'Ground Floor, Student Activity Center (SAC)'}</div>
+          <div><strong>Hours:</strong> {shopSettings?.openingTime && shopSettings?.closingTime ? `${shopSettings.openingTime} – ${shopSettings.closingTime} (${shopSettings.weeklyHoliday && shopSettings.weeklyHoliday !== 'None' ? `Closed on ${shopSettings.weeklyHoliday}s` : 'Open on college days'})` : 'Monday – Saturday: 8:30 AM – 6:30 PM'}</div>
+          <div><strong>Support Email:</strong> {shopSettings?.email || 'stationery@vit.edu'} {shopSettings?.phone ? `| Phone: ${shopSettings.phone}` : ''}</div>
         </div>
       </section>
 

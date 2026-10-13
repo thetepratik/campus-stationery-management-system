@@ -42,15 +42,7 @@ const Settings = () => {
       </div>
 
       {/* Two-Column Layout */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '260px 1fr',
-          gap: 'var(--space-6)',
-          alignItems: 'start',
-        }}
-        className="settings-layout-grid"
-      >
+      <div className="settings-layout-grid">
         {/* Left Navigation Card */}
         <div className="card panel" style={{ padding: 'var(--space-3)' }}>
           <div

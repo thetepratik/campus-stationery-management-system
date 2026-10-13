@@ -8,6 +8,16 @@ const shopSettingsSchema = new mongoose.Schema(
       trim: true,
       default: 'Campus Stationery Shop',
     },
+    tagline: {
+      type: String,
+      trim: true,
+      default: 'Your Stationery, Your Priority',
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: 'Your one-stop campus supply shop for notebooks, pens, calculators, and study essentials.',
+    },
     collegeName: {
       type: String,
       trim: true,
@@ -32,6 +42,13 @@ const shopSettingsSchema = new mongoose.Schema(
     logo: {
       type: String,
       default: '',
+    },
+    logoImage: {
+      data: { type: Buffer },
+      contentType: { type: String },
+      fileName: { type: String },
+      size: { type: Number, default: 0 },
+      uploadedAt: { type: Date },
     },
     openingTime: {
       type: String,

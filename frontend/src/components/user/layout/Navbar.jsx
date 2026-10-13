@@ -20,6 +20,8 @@ import { useAuth } from '../../../context/AuthContext';
 import { useTheme } from '../../../context/ThemeContext';
 import { useWishlist } from '../../../context/WishlistContext';
 import { useCart } from '../../../context/CartContext';
+import { useShopSettings } from '../../../context/ShopSettingsContext';
+import { getImageUrl } from '../../../utils/imageUrl';
 import NotificationBell from '../../notifications/NotificationBell';
 
 const Navbar = () => {
@@ -27,6 +29,7 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { count: wishlistCount } = useWishlist();
   const { count: cartCount } = useCart();
+  const { settings: shopSettings } = useShopSettings();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -89,12 +92,29 @@ const Navbar = () => {
       <div className="container flex items-center justify-between" style={{ height: '100%' }}>
         {/* Left: Brand Logo & Tagline */}
         <Link to="/" className="modern-navbar__brand flex items-center gap-2">
-          <div className="modern-navbar__logo-icon">
+          {shopSettings?.logo ? (
+            <img
+              src={getImageUrl(shopSettings.logo)}
+              alt={shopSettings.shopName || 'Shop Logo'}
+              className="modern-navbar__logo-img"
+              style={{ width: 34, height: 34, borderRadius: 'var(--radius-sm)', objectFit: 'contain' }}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                if (e.currentTarget.nextElementSibling) {
+                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                }
+              }}
+            />
+          ) : null}
+          <div
+            className="modern-navbar__logo-icon"
+            style={{ display: shopSettings?.logo ? 'none' : 'flex' }}
+          >
             <FaGraduationCap size={20} />
           </div>
           <div className="modern-navbar__brand-text">
-            <span className="modern-navbar__brand-title">CampusKart</span>
-            <span className="modern-navbar__brand-tagline">Your Stationery, Your Priority</span>
+            <span className="modern-navbar__brand-title">{shopSettings?.shopName || 'CampusKart'}</span>
+            <span className="modern-navbar__brand-tagline">{shopSettings?.tagline || 'Your Stationery, Your Priority'}</span>
           </div>
         </Link>
 
@@ -282,10 +302,26 @@ const Navbar = () => {
           <div className="modern-navbar__mobile-drawer" onClick={(e) => e.stopPropagation()}>
             <div className="modern-navbar__mobile-drawer-header">
               <div className="flex items-center gap-2">
-                <div className="modern-navbar__logo-icon">
+                {shopSettings?.logo ? (
+                  <img
+                    src={getImageUrl(shopSettings.logo)}
+                    alt={shopSettings.shopName || 'Shop Logo'}
+                    style={{ width: 26, height: 26, borderRadius: 'var(--radius-sm)', objectFit: 'contain' }}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      if (e.currentTarget.nextElementSibling) {
+                        e.currentTarget.nextElementSibling.style.display = 'flex';
+                      }
+                    }}
+                  />
+                ) : null}
+                <div
+                  className="modern-navbar__logo-icon"
+                  style={{ display: shopSettings?.logo ? 'none' : 'flex' }}
+                >
                   <FaGraduationCap size={18} />
                 </div>
-                <span style={{ fontWeight: 800, fontSize: 'var(--font-size-base)' }}>CampusKart</span>
+                <span style={{ fontWeight: 800, fontSize: 'var(--font-size-base)' }}>{shopSettings?.shopName || 'CampusKart'}</span>
               </div>
               <button
                 className="btn btn--icon"

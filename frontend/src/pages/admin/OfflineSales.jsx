@@ -107,7 +107,7 @@ const OfflineSales = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between" style={{ marginBottom: 'var(--space-5)' }}>
+      <div className="flex items-center justify-between" style={{ marginBottom: 'var(--space-5)', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
         <div>
           <h1 style={{ fontSize: 'var(--font-size-xl)' }}>Offline Sales (POS)</h1>
           <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>

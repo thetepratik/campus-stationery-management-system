@@ -24,8 +24,8 @@ const SaleDetailsForm = ({ details, onChange }) => {
         value={details.customerName}
         onChange={(e) => update({ customerName: e.target.value })}
       />
-      <div className="flex gap-3">
-        <div style={{ flex: 1 }}>
+      <div className="flex gap-3" style={{ flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 140px', minWidth: 0 }}>
           <Input
             id="rollNumber"
             label="Roll Number (optional)"
@@ -34,7 +34,7 @@ const SaleDetailsForm = ({ details, onChange }) => {
             onChange={(e) => update({ rollNumber: e.target.value })}
           />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: '1 1 140px', minWidth: 0 }}>
           <Input
             id="department"
             label="Department (optional)"

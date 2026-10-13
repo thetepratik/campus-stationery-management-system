@@ -53,7 +53,7 @@ export const settingsApi = {
           formData.append(key, data[key]);
         }
       });
-      formData.append('image', file);
+      formData.append('logo', file);
       return api.patch('/shop-settings', formData);
     }
     return api.patch('/shop-settings', data);

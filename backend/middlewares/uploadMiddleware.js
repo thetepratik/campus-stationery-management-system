@@ -17,8 +17,26 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024, files: 6 }, // 5MB per file, max 6 files
 });
 
-// Single image (category)
-const uploadSingleImage = upload.single('image');
+// Single image (category, admin avatar, or shop logo)
+const singleUploadHandler = upload.fields([
+  { name: 'logo', maxCount: 1 },
+  { name: 'image', maxCount: 1 },
+  { name: 'avatar', maxCount: 1 },
+]);
+
+const uploadSingleImage = (req, res, next) => {
+  const contentType = req.headers['content-type'] || '';
+  if (!contentType.includes('multipart/form-data')) {
+    return next();
+  }
+  singleUploadHandler(req, res, (err) => {
+    if (err) return next(err);
+    if (req.files) {
+      req.file = req.files.logo?.[0] || req.files.image?.[0] || req.files.avatar?.[0] || null;
+    }
+    next();
+  });
+};
 
 // Multiple images (product gallery)
 const uploadMultipleImages = upload.array('images', 6);

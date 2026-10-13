@@ -42,10 +42,43 @@ const updateShopSettings = asyncHandler(async (req, res) => {
   success(res, 200, 'Shop information updated successfully', { settings });
 });
 
+/**
+ * GET /api/shop-settings/logo
+ */
+const getShopLogo = asyncHandler(async (req, res) => {
+  const result = await settingsService.getShopLogo();
+  if (!result) {
+    return res.status(404).json({ success: false, message: 'Shop settings not found' });
+  }
+
+  const { logoImage, logo } = result;
+
+  if (logoImage && logoImage.data) {
+    res.set('Content-Type', logoImage.contentType || 'image/png');
+    res.set('Cache-Control', 'public, max-age=86400, must-revalidate');
+    const buffer = Buffer.isBuffer(logoImage.data)
+      ? logoImage.data
+      : Buffer.from(logoImage.data.buffer || logoImage.data);
+    return res.send(buffer);
+  }
+
+  if (logo && typeof logo === 'string' && logo.startsWith('data:')) {
+    const matches = logo.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (matches && matches.length === 3) {
+      res.set('Content-Type', matches[1]);
+      res.set('Cache-Control', 'public, max-age=86400, must-revalidate');
+      return res.send(Buffer.from(matches[2], 'base64'));
+    }
+  }
+
+  return res.status(404).json({ success: false, message: 'Shop logo not found' });
+});
+
 module.exports = {
   getAdminProfile,
   updateAdminProfile,
   changeAdminPassword,
   getShopSettings,
+  getShopLogo,
   updateShopSettings,
 };

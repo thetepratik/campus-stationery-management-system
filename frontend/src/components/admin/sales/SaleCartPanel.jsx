@@ -31,16 +31,32 @@ const SaleCartPanel = ({ cart, onIncrement, onDecrement, onRemove }) => {
           <div
             key={item._id}
             className="flex items-center justify-between"
-            style={{ padding: 'var(--space-3)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}
+            style={{
+              padding: 'var(--space-3)',
+              border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              gap: 'var(--space-2)',
+              flexWrap: 'wrap',
+            }}
           >
-            <div>
-              <div style={{ fontWeight: 500, fontSize: 'var(--font-size-sm)' }}>{item.name}</div>
+            <div style={{ minWidth: 0, flex: '1 1 120px' }}>
+              <div
+                style={{
+                  fontWeight: 500,
+                  fontSize: 'var(--font-size-sm)',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                title={item.name}
+              >
+                {item.name}
+              </div>
               <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>
                 {formatCurrency(item.sellingPrice)} each
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" style={{ flexShrink: 0, marginLeft: 'auto' }}>
+              <div className="flex items-center gap-1">
                 <button className="btn btn--outline btn--sm btn--icon" onClick={() => onDecrement(item._id)}>
                   <FiMinus size={12} />
                 </button>
@@ -54,7 +70,7 @@ const SaleCartPanel = ({ cart, onIncrement, onDecrement, onRemove }) => {
                   <FiPlus size={12} />
                 </button>
               </div>
-              <span style={{ fontWeight: 600, minWidth: 70, textAlign: 'right' }}>
+              <span style={{ fontWeight: 600, minWidth: 60, textAlign: 'right', fontSize: 'var(--font-size-sm)' }}>
                 {formatCurrency(item.sellingPrice * item.quantity)}
               </span>
               <button className="btn btn--ghost btn--sm btn--icon" onClick={() => onRemove(item._id)} title="Remove">

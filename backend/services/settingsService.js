@@ -96,23 +96,60 @@ const changeAdminPassword = async (adminId, { currentPassword, newPassword, conf
 };
 
 /**
+ * Formats a ShopSettings document for lightweight API responses.
+ * Never leaks raw binary buffers or large Base64 blobs into settings JSON.
+ */
+const serializeShopSettings = (settings) => {
+  if (!settings) return null;
+  const obj = typeof settings.toObject === 'function' ? settings.toObject() : { ...settings };
+
+  const hasBinaryLogo = Boolean(obj.logoImage && (obj.logoImage.data || obj.logoImage.contentType));
+
+  if (hasBinaryLogo) {
+    const version = obj.updatedAt ? new Date(obj.updatedAt).getTime() : Date.now();
+    obj.logo = `/api/shop-settings/logo?v=${version}`;
+  } else if (!obj.logo || obj.logo.startsWith('/api/shop-settings/logo')) {
+    obj.logo = '';
+  }
+
+  // Strip internal binary buffer from regular response
+  delete obj.logoImage;
+  return obj;
+};
+
+/**
  * Get singleton ShopSettings document (or create default if none exists)
  */
 const getShopSettings = async () => {
-  let settings = await ShopSettings.findOne();
+  let settings = await ShopSettings.findOne().select('-logoImage.data');
   if (!settings) {
     settings = await ShopSettings.create({
-      shopName: 'Campus Stationery Shop',
+      shopName: 'Campus Stationery Hub',
+      tagline: 'Your Stationery, Your Priority',
+      description: 'Your one-stop campus supply shop for notebooks, pens, calculators, and study essentials.',
       collegeName: 'Vishwakarma Institute of Technology',
       address: 'College Campus, Pune, Maharashtra',
       phone: '9876543210',
       email: 'stationery@college.edu',
-      openingTime: '09:00',
-      closingTime: '18:00',
+      openingTime: '08:30',
+      closingTime: '18:30',
       weeklyHoliday: 'Sunday',
     });
   }
-  return settings;
+  return serializeShopSettings(settings);
+};
+
+/**
+ * Retrieve raw logo image buffer and content type for dedicated streaming endpoint
+ */
+const getShopLogo = async () => {
+  const settings = await ShopSettings.findOne().select('logo logoImage updatedAt');
+  if (!settings) return null;
+  return {
+    logoImage: settings.logoImage,
+    logo: settings.logo,
+    updatedAt: settings.updatedAt,
+  };
 };
 
 /**
@@ -131,6 +168,16 @@ const updateShopSettings = async (data = {}, file = null) => {
       throw new ApiError(400, 'Shop name is required');
     }
     settings.shopName = shopName;
+  }
+
+  // Tagline
+  if (data.tagline !== undefined) {
+    settings.tagline = String(data.tagline || '').trim();
+  }
+
+  // Description
+  if (data.description !== undefined) {
+    settings.description = String(data.description || '').trim();
   }
 
   // College Name
@@ -174,16 +221,30 @@ const updateShopSettings = async (data = {}, file = null) => {
     settings.weeklyHoliday = String(data.weeklyHoliday || '').trim();
   }
 
-  // Shop Logo
+  // Shop Logo File Upload
   if (file && file.buffer) {
-    settings.logo = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-  } else if (data.logo !== undefined || data.shopLogo !== undefined) {
-    const newLogo = data.logo !== undefined ? data.logo : data.shopLogo;
-    settings.logo = String(newLogo || '').trim();
+    settings.logoImage = {
+      data: file.buffer,
+      contentType: file.mimetype,
+      fileName: file.originalname || 'shop-logo',
+      size: file.size,
+      uploadedAt: new Date(),
+    };
+    settings.logo = `/api/shop-settings/logo?v=${Date.now()}`;
+    settings.markModified('logoImage');
+  } else if (
+    data.logo === '' ||
+    data.removeLogo === 'true' ||
+    data.removeLogo === true
+  ) {
+    // Explicit removal
+    settings.set('logoImage', undefined);
+    settings.logo = '';
+    settings.markModified('logoImage');
   }
 
   await settings.save();
-  return settings;
+  return serializeShopSettings(settings);
 };
 
 module.exports = {
@@ -191,5 +252,6 @@ module.exports = {
   updateAdminProfile,
   changeAdminPassword,
   getShopSettings,
+  getShopLogo,
   updateShopSettings,
 };

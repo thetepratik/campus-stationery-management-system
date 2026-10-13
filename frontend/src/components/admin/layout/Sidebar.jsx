@@ -14,6 +14,8 @@ import {
   FiBookOpen,
 } from 'react-icons/fi';
 import { useAuth } from '../../../context/AuthContext';
+import { useShopSettings } from '../../../context/ShopSettingsContext';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const NAV_ITEMS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: FiGrid, end: true },
@@ -30,18 +32,41 @@ const NAV_ITEMS = [
 
 const Sidebar = ({ collapsed, mobileOpen, onCloseMobile }) => {
   const { adminLogout } = useAuth();
+  const { settings: shopSettings } = useShopSettings();
 
   return (
     <>
       {mobileOpen && <div className="sidebar-backdrop" onClick={onCloseMobile} />}
       <aside className={`admin-sidebar ${collapsed ? 'admin-sidebar--collapsed' : ''} ${mobileOpen ? 'admin-sidebar--mobile-open' : ''}`}>
         <div className="admin-sidebar__brand">
-          <div className="admin-sidebar__brand-icon">
+          {shopSettings?.logo ? (
+            <img
+              src={getImageUrl(shopSettings.logo)}
+              alt={shopSettings.shopName || 'Shop Logo'}
+              style={{ width: 32, height: 32, borderRadius: 'var(--radius-sm)', objectFit: 'contain' }}
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                if (e.currentTarget.nextElementSibling) {
+                  e.currentTarget.nextElementSibling.style.display = 'flex';
+                }
+              }}
+            />
+          ) : null}
+          <div
+            className="admin-sidebar__brand-icon"
+            style={{ display: shopSettings?.logo ? 'none' : 'flex' }}
+          >
             <FiBookOpen />
           </div>
           {!collapsed && (
-            <div>
-              <div className="admin-sidebar__brand-title">Campus Stationery</div>
+            <div style={{ minWidth: 0, overflow: 'hidden' }}>
+              <div
+                className="admin-sidebar__brand-title"
+                style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                title={shopSettings?.shopName || 'Campus Stationery'}
+              >
+                {shopSettings?.shopName || 'Campus Stationery'}
+              </div>
               <div className="admin-sidebar__brand-subtitle">Admin Panel</div>
             </div>
           )}

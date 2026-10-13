@@ -26,7 +26,9 @@ api.interceptors.request.use(
     // Do NOT manually set Content-Type for FormData.
     // The browser/Axios will automatically set:
     // multipart/form-data; boundary=...
-    if (!(config.data instanceof FormData)) {
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    } else if (!config.headers["Content-Type"]) {
       config.headers["Content-Type"] = "application/json";
     }
 

@@ -9,6 +9,9 @@ const { uploadSingleImage } = require('../middlewares/uploadMiddleware');
 // GET /api/shop-settings (Retrieve shop details)
 router.get('/', settingsController.getShopSettings);
 
+// GET /api/shop-settings/logo (Retrieve shop logo)
+router.get('/logo', settingsController.getShopLogo);
+
 // Update shop details (Admin only)
 router.patch('/', verifyToken, requireRole('admin'), uploadSingleImage, settingsController.updateShopSettings);
 router.put('/', verifyToken, requireRole('admin'), uploadSingleImage, settingsController.updateShopSettings);

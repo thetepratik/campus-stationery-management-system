@@ -7,6 +7,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CartProvider } from './context/CartContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { ShopSettingsProvider } from './context/ShopSettingsContext';
 import ProtectedRoute from './routes/ProtectedRoute';
 
 // Auth pages
@@ -52,6 +53,7 @@ function App() {
         <WishlistProvider>
           <CartProvider>
             <NotificationProvider>
+              <ShopSettingsProvider>
 
             <Routes>
 
@@ -285,6 +287,7 @@ function App() {
               pauseOnHover
             />
 
+              </ShopSettingsProvider>
             </NotificationProvider>
           </CartProvider>
         </WishlistProvider>

@@ -6,9 +6,12 @@ import Button from '../../common/Button';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { formatDateTime } from '../../../utils/formatDate';
 import { saleApi } from '../../../services/saleApi';
+import { useShopSettings } from '../../../context/ShopSettingsContext';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const ReceiptModal = ({ open, onClose, sale }) => {
   const [downloading, setDownloading] = useState(false);
+  const { settings: shopSettings } = useShopSettings();
 
   if (!sale) return null;
 
@@ -48,8 +51,18 @@ const ReceiptModal = ({ open, onClose, sale }) => {
         )}
 
         <div style={{ border: '1px dashed var(--color-border-strong)', borderRadius: 'var(--radius-md)', padding: 'var(--space-5)' }}>
-          <div className="flex justify-between" style={{ marginBottom: 'var(--space-2)' }}>
-            <strong>Campus Stationery</strong>
+          <div className="flex justify-between items-center" style={{ marginBottom: 'var(--space-2)' }}>
+            <div className="flex items-center gap-2">
+              {shopSettings?.logo ? (
+                <img
+                  src={getImageUrl(shopSettings.logo)}
+                  alt="Shop Logo"
+                  style={{ width: 22, height: 22, borderRadius: 4, objectFit: 'contain' }}
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                />
+              ) : null}
+              <strong>{shopSettings?.shopName || 'Campus Stationery'}</strong>
+            </div>
             <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>{sale.saleId}</span>
           </div>
           <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-3)' }}>
@@ -85,7 +98,7 @@ const ReceiptModal = ({ open, onClose, sale }) => {
         </div>
       </div>
 
-      <div className="flex gap-3 justify-end" style={{ marginTop: 'var(--space-5)' }}>
+      <div className="flex gap-2 justify-end" style={{ marginTop: 'var(--space-5)', flexWrap: 'wrap' }}>
         <Button variant="outline" onClick={handleDownloadInvoice} loading={downloading}>
           <FiDownload size={14} /> Invoice PDF
         </Button>

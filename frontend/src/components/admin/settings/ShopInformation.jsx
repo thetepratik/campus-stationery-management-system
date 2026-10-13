@@ -13,9 +13,13 @@ import {
   FiCamera,
   FiTrash2,
   FiSave,
+  FiBookmark,
+  FiFileText,
 } from 'react-icons/fi';
 
 import { settingsApi } from '../../../services/settingsApi';
+import { useShopSettings } from '../../../context/ShopSettingsContext';
+import { getImageUrl } from '../../../utils/imageUrl';
 
 const WEEKLY_HOLIDAY_OPTIONS = [
   'Sunday',
@@ -29,18 +33,21 @@ const WEEKLY_HOLIDAY_OPTIONS = [
 ];
 
 const ShopInformation = () => {
+  const { updateSettings } = useShopSettings();
   const fileInputRef = useRef(null);
 
   // Shop data state
   const [shop, setShop] = useState({
     shopName: '',
+    tagline: '',
+    description: '',
     collegeName: '',
     address: '',
     phone: '',
     email: '',
     logo: '',
-    openingTime: '09:00',
-    closingTime: '18:00',
+    openingTime: '08:30',
+    closingTime: '18:30',
     weeklyHoliday: 'Sunday',
   });
   const [initialShop, setInitialShop] = useState(null);
@@ -58,16 +65,18 @@ const ShopInformation = () => {
     setLoading(true);
     try {
       const res = await settingsApi.getShopInformation();
-      const s = res.data.settings || {};
+      const s = res.data?.settings || {};
       const loaded = {
         shopName: s.shopName || '',
+        tagline: s.tagline || '',
+        description: s.description || '',
         collegeName: s.collegeName || '',
         address: s.address || '',
         phone: s.phone || '',
         email: s.email || '',
         logo: s.logo || '',
-        openingTime: s.openingTime || '09:00',
-        closingTime: s.closingTime || '18:00',
+        openingTime: s.openingTime || '08:30',
+        closingTime: s.closingTime || '18:30',
         weeklyHoliday: s.weeklyHoliday || 'Sunday',
       };
       setShop(loaded);
@@ -94,12 +103,14 @@ const ShopInformation = () => {
     const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
     if (!validTypes.includes(file.type)) {
       toast.error('Only JPG, JPEG, PNG, and WEBP images are allowed.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
     // Validate size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       toast.error('Logo file size must be under 5MB.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
@@ -142,6 +153,8 @@ const ShopInformation = () => {
     try {
       const payload = {
         shopName,
+        tagline: shop.tagline.trim(),
+        description: shop.description.trim(),
         collegeName: shop.collegeName.trim(),
         address: shop.address.trim(),
         phone,
@@ -151,8 +164,9 @@ const ShopInformation = () => {
         weeklyHoliday: shop.weeklyHoliday,
       };
 
-      if (!logoFile && logoPreview === '') {
+      if (!logoFile && (logoPreview === '' || shop.logo === '')) {
         payload.logo = '';
+        payload.removeLogo = true;
       }
 
       const res = await settingsApi.updateShopInformation(payload, logoFile);
@@ -160,28 +174,27 @@ const ShopInformation = () => {
 
       toast.success('Shop information updated successfully.');
 
-      setShop({
+      // Update centralized context so entire application reflects changes immediately
+      if (typeof updateSettings === 'function') {
+        updateSettings(updated);
+      }
+
+      const savedState = {
         shopName: updated.shopName || '',
+        tagline: updated.tagline || '',
+        description: updated.description || '',
         collegeName: updated.collegeName || '',
         address: updated.address || '',
         phone: updated.phone || '',
         email: updated.email || '',
         logo: updated.logo || '',
-        openingTime: updated.openingTime || '09:00',
-        closingTime: updated.closingTime || '18:00',
+        openingTime: updated.openingTime || '08:30',
+        closingTime: updated.closingTime || '18:30',
         weeklyHoliday: updated.weeklyHoliday || 'Sunday',
-      });
-      setInitialShop({
-        shopName: updated.shopName || '',
-        collegeName: updated.collegeName || '',
-        address: updated.address || '',
-        phone: updated.phone || '',
-        email: updated.email || '',
-        logo: updated.logo || '',
-        openingTime: updated.openingTime || '09:00',
-        closingTime: updated.closingTime || '18:00',
-        weeklyHoliday: updated.weeklyHoliday || 'Sunday',
-      });
+      };
+
+      setShop(savedState);
+      setInitialShop(savedState);
       setLogoPreview(updated.logo || '');
       setLogoFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -205,6 +218,8 @@ const ShopInformation = () => {
   const hasChanges =
     initialShop &&
     (shop.shopName !== initialShop.shopName ||
+      shop.tagline !== initialShop.tagline ||
+      shop.description !== initialShop.description ||
       shop.collegeName !== initialShop.collegeName ||
       shop.address !== initialShop.address ||
       shop.phone !== initialShop.phone ||
@@ -271,17 +286,32 @@ const ShopInformation = () => {
           >
             {logoPreview ? (
               <img
-                src={logoPreview}
+                src={logoPreview.startsWith('blob:') || logoPreview.startsWith('data:') ? logoPreview : getImageUrl(logoPreview)}
                 alt="Shop Logo"
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  if (e.currentTarget.nextElementSibling) {
+                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                  }
+                }}
               />
-            ) : (
+            ) : null}
+            <div
+              style={{
+                display: logoPreview ? 'none' : 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%',
+              }}
+            >
               <FiShoppingBag size={28} style={{ color: 'var(--color-text-muted)' }} />
-            )}
+            </div>
           </div>
 
           {/* Logo Actions */}
-          <div>
+          <div style={{ flex: '1 1 200px' }}>
             <div style={{ fontSize: 'var(--font-size-sm)', fontWeight: 600, marginBottom: 4 }}>
               Shop Logo
             </div>
@@ -292,9 +322,9 @@ const ShopInformation = () => {
                 marginBottom: 'var(--space-3)',
               }}
             >
-              Displayed on invoices, order receipts, and shop banner. Max 5MB.
+              Displayed on headers, invoices, receipts, and login pages. Max 5MB (PNG, JPG, WebP).
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2" style={{ flexWrap: 'wrap' }}>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -336,7 +366,7 @@ const ShopInformation = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
             gap: 'var(--space-4)',
             marginBottom: 'var(--space-4)',
           }}
@@ -351,13 +381,41 @@ const ShopInformation = () => {
                 id="shop-name-input"
                 type="text"
                 className="form-input"
-                placeholder="e.g. College Stationery Shop"
+                placeholder="e.g. Campus Stationery Hub"
                 value={shop.shopName}
                 onChange={(e) => setShop({ ...shop, shopName: e.target.value })}
                 style={{ width: '100%', paddingLeft: 34 }}
                 required
               />
               <FiShoppingBag
+                size={15}
+                style={{
+                  position: 'absolute',
+                  left: 10,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: 'var(--color-text-muted)',
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Shop Tagline */}
+          <div className="form-group">
+            <label className="form-label" htmlFor="shop-tagline-input">
+              Shop Tagline
+            </label>
+            <div style={{ position: 'relative' }}>
+              <input
+                id="shop-tagline-input"
+                type="text"
+                className="form-input"
+                placeholder="e.g. Your Stationery, Your Priority"
+                value={shop.tagline}
+                onChange={(e) => setShop({ ...shop, tagline: e.target.value })}
+                style={{ width: '100%', paddingLeft: 34 }}
+              />
+              <FiBookmark
                 size={15}
                 style={{
                   position: 'absolute',
@@ -455,6 +513,24 @@ const ShopInformation = () => {
           </div>
         </div>
 
+        {/* Shop Description Row */}
+        <div className="form-group" style={{ marginBottom: 'var(--space-4)' }}>
+          <label className="form-label" htmlFor="shop-description-input">
+            Shop Description
+          </label>
+          <div style={{ position: 'relative' }}>
+            <textarea
+              id="shop-description-input"
+              className="form-input"
+              rows={2}
+              placeholder="e.g. Your one-stop campus supply shop for notebooks, pens, calculators, and study essentials."
+              value={shop.description}
+              onChange={(e) => setShop({ ...shop, description: e.target.value })}
+              style={{ width: '100%', resize: 'vertical' }}
+            />
+          </div>
+        </div>
+
         {/* Address Row */}
         <div className="form-group" style={{ marginBottom: 'var(--space-4)' }}>
           <label className="form-label" htmlFor="shop-address-input">
@@ -464,7 +540,7 @@ const ShopInformation = () => {
             <textarea
               id="shop-address-input"
               className="form-input"
-              rows={3}
+              rows={2}
               placeholder="e.g. Campus Gate 2, Vishwakarma Institute of Technology, Pune, Maharashtra"
               value={shop.address}
               onChange={(e) => setShop({ ...shop, address: e.target.value })}
@@ -477,7 +553,7 @@ const ShopInformation = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: 'var(--space-4)',
             marginBottom: 'var(--space-5)',
             background: 'var(--color-bg)',
@@ -539,7 +615,7 @@ const ShopInformation = () => {
         {/* Action Buttons */}
         <div
           className="flex items-center justify-end gap-3"
-          style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-4)' }}
+          style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-4)', flexWrap: 'wrap' }}
         >
           <button
             type="button"
